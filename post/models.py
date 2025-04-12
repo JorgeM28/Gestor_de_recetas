@@ -127,3 +127,35 @@ class Repost(models.Model):
     def __str__(self):
         return f"{self.reposted_by.username} reposteó {self.original_recipe.title}"
 
+# Modelo para sugerencias (chat)
+class Suggestion(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='suggestions')
+    message = models.TextField(verbose_name='Mensaje')
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_read = models.BooleanField(default=False)
+    
+    def __str__(self):
+        return f"Sugerencia de {self.user.username} ({self.created_at.strftime('%d/%m/%Y %H:%M')})"
+
+# Modelo para notificaciones
+class Notification(models.Model):
+    TYPES = (
+        ('repost', 'Repost'),
+        ('suggestion', 'Nueva sugerencia'),
+        ('comment', 'Nuevo comentario'),
+    )
+    
+    recipient = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notifications')
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_notifications')
+    notification_type = models.CharField(max_length=20, choices=TYPES)
+    content = models.CharField(max_length=255)
+    related_recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE, null=True, blank=True)
+    related_suggestion = models.ForeignKey(Suggestion, on_delete=models.CASCADE, null=True, blank=True)
+    is_read = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        ordering = ['-created_at']
+        
+    def __str__(self):
+        return f"Notificación para {self.recipient.username}: {self.content}"

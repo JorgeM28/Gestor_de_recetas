@@ -7,6 +7,10 @@ from django.shortcuts import render, get_object_or_404
 from django.contrib import messages
 from .models import Repost
 from .forms import RepostForm
+from .models import Suggestion, Notification
+from .forms import SuggestionForm
+from django.http import JsonResponse
+from django.urls import reverse
 
 def index(request):
     recetas_recientes = Recipe.objects.filter(published=True).order_by('-created_at')[:6]  # Últimas 6 recetas
@@ -170,6 +174,16 @@ def detalle_receta(request, recipe_id):
             comentario.recipe = receta
             comentario.author = request.user
             comentario.save()
+            
+            # Crear notificación para el autor de la receta
+            if request.user != receta.author:
+                Notification.objects.create(
+                    recipient=receta.author,
+                    sender=request.user,
+                    notification_type='comment',
+                    content=f"{request.user.username} ha comentado en tu receta '{receta.title}'",
+                    related_recipe=receta
+                )
             messages.success(request, 'Comentario añadido correctamente')
             return redirect('detalle_receta', recipe_id=receta.id)
 
@@ -268,6 +282,17 @@ def repost_recipe(request, recipe_id):
                 repost.reposted_by = request.user
                 repost.save()
                 messages.success(request, 'Receta reposteada correctamente')
+                
+                # Crear notificación para el autor original
+                if recipe.author != request.user:
+                    Notification.objects.create(
+                        recipient=recipe.author,
+                        sender=request.user,
+                        notification_type='repost',
+                        content=f"{request.user.username} ha reposteado tu receta '{recipe.title}'",
+                        related_recipe=recipe
+                    )
+                    
             return redirect('perfil_publico', username=request.user.username)
     else:
         initial_data = {}
@@ -280,3 +305,108 @@ def repost_recipe(request, recipe_id):
         'recipe': recipe,
         'existing_repost': existing_repost
     })
+
+@login_required
+def submit_suggestion(request):
+    if request.method == 'POST':
+        form = SuggestionForm(request.POST)
+        if form.is_valid():
+            suggestion = form.save(commit=False)
+            suggestion.user = request.user
+            suggestion.save()
+            
+            # Crear notificación para administradores
+            admins = User.objects.filter(is_superuser=True)
+            for admin in admins:
+                Notification.objects.create(
+                    recipient=admin,
+                    sender=request.user,
+                    notification_type='suggestion',
+                    content=f"{request.user.username} ha enviado una nueva sugerencia",
+                    related_suggestion=suggestion
+                )
+            
+            return JsonResponse({'status': 'success', 'message': 'Sugerencia enviada correctamente'})
+    
+    return JsonResponse({'status': 'error', 'message': 'Error al enviar la sugerencia'})
+
+@login_required
+def get_notifications(request):
+    try:
+        # Primero obtenemos el QuerySet base
+        all_notifications = Notification.objects.filter(recipient=request.user)
+        
+        # Obtenemos el conteo de no leídas antes de aplicar cualquier slice
+        unread_count = all_notifications.filter(is_read=False).count()
+        
+        # Obtenemos las notificaciones recientes para mostrar
+        user_notifications = all_notifications.order_by('-created_at')[:5]
+        
+        notifications_data = []
+        for notification in user_notifications:
+            notification_data = {
+                'id': notification.id,
+                'content': notification.content,
+                'type': notification.notification_type,
+                'is_read': notification.is_read,
+                'time': notification.created_at.strftime("%d/%m/%Y %H:%M"),
+                'sender': notification.sender.username,
+            }
+            
+            if notification.related_recipe:
+                notification_data['url'] = reverse('detalle_receta', args=[notification.related_recipe.id])
+            elif notification.related_suggestion and request.user.is_superuser:
+                notification_data['url'] = reverse('suggestions_list')
+            
+            notifications_data.append(notification_data)
+        
+        return JsonResponse({
+            'notifications': notifications_data,
+            'unread_count': unread_count
+        })
+    except Exception as e:
+        import traceback
+        print(traceback.format_exc())  # Para depuración en el servidor
+        return JsonResponse({
+            'error': str(e),
+            'notifications': [],
+            'unread_count': 0
+        }, status=200)  # Devolvemos 200 con mensaje de error en vez de 500
+
+@login_required
+def mark_notification_read(request, notification_id):
+    if request.method == 'POST':
+        try:
+            notification = Notification.objects.get(id=notification_id, recipient=request.user)
+            notification.is_read = True
+            notification.save()
+            return JsonResponse({'status': 'success'})
+        except Notification.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'Notificación no encontrada'})
+    
+    return JsonResponse({'status': 'error', 'message': 'Método no permitido'})
+
+@login_required
+def suggestions_list(request):
+    if not request.user.is_superuser:
+        messages.error(request, 'No tienes permiso para acceder a esta página')
+        return redirect('index')
+    
+    suggestions = Suggestion.objects.all().order_by('-created_at')
+    return render(request, 'post/suggestions_list.html', {'suggestions': suggestions})
+
+@login_required
+def mark_suggestion_read(request, suggestion_id):
+    if not request.user.is_superuser:
+        return JsonResponse({'status': 'error', 'message': 'No tienes permiso'})
+    
+    if request.method == 'POST':
+        try:
+            suggestion = Suggestion.objects.get(id=suggestion_id)
+            suggestion.is_read = True
+            suggestion.save()
+            return JsonResponse({'status': 'success'})
+        except Suggestion.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'Sugerencia no encontrada'})
+    
+    return JsonResponse({'status': 'error', 'message': 'Método no permitido'})

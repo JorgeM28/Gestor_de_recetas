@@ -256,6 +256,477 @@
                 max-width: 100%;
             }
         }
+
+        /* Estilos para el chat y notificaciones */
+        .chat-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .chat-button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .chat-button i {
+            margin-right: 5px;
+        }
+
+        .chat-popup {
+            display: none;
+            position: absolute;
+            bottom: 60px;
+            right: 0;
+            width: 300px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .chat-popup.show {
+            display: block;
+        }
+
+        .chat-header {
+            background-color: #007bff;
+            color: white;
+            padding: 10px;
+            border-radius: 10px 10px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-body {
+            padding: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 10px;
+        }
+
+        .suggestion-input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 0.9rem;
+        }
+
+        .btn-send-suggestion {
+            background-color: #28a745;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+
+        .btn-send-suggestion i {
+            margin-right: 5px;
+        }
+
+        .suggestion-status {
+            margin-top: 10px;
+        }
+
+        .error-message {
+            color: #dc3545;
+        }
+
+        .success-message {
+            color: #28a745;
+        }
+
+        .notifications-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .notifications-icon {
+            background-color: #007bff;
+            color: white;
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: #dc3545;
+            color: white;
+            border-radius: 50%;
+            padding: 2px 5px;
+            font-size: 0.8rem;
+            display: none;
+        }
+
+        .notification-badge.show {
+            display: inline-block;
+        }
+
+        .notifications-popup {
+            display: none;
+            position: absolute;
+            top: 50px;
+            right: 0;
+            width: 300px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .notifications-popup.show {
+            display: block;
+        }
+
+        .notifications-header {
+            background-color: #007bff;
+            color: white;
+            padding: 10px;
+            border-radius: 10px 10px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .notifications-body {
+            padding: 10px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .notification-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+        }
+
+        .notification-item.notification-unread {
+            background-color: #f8f9fa;
+        }
+
+        .notification-item.notification-read {
+            background-color: white;
+        }
+
+        .notification-icon {
+            margin-right: 10px;
+        }
+
+        .notification-content {
+            flex-grow: 1;
+        }
+
+        .notification-text {
+            font-weight: 500;
+        }
+
+        .notification-time {
+            font-size: 0.8rem;
+            color: #6c757d;
+        }
+
+        .notification-link {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .loading-notifications {
+            text-align: center;
+            padding: 10px;
+        }
+
+        .no-notifications {
+            text-align: center;
+            padding: 10px;
+            color: #6c757d;
+        }
+
+        /* Estilos para el chat flotante */
+        .chat-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        
+        .chat-button {
+            background-color: #007bff;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+        
+        .chat-button:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+        
+        .chat-popup {
+            position: absolute;
+            bottom: 70px;
+            right: 0;
+            width: 300px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            display: none;
+            overflow: hidden;
+            transition: all 0.3s;
+            transform: translateY(20px);
+            opacity: 0;
+        }
+        
+        .chat-popup.show {
+            display: block;
+            transform: translateY(0);
+            opacity: 1;
+        }
+        
+        .chat-header {
+            background-color: #007bff;
+            color: white;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .chat-header h3 {
+            margin: 0;
+            font-size: 1rem;
+        }
+        
+        .close-chat {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        
+        .chat-body {
+            padding: 15px;
+        }
+        
+        .suggestion-input {
+            width: 100%;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 10px;
+            resize: none;
+        }
+        
+        .btn-send-suggestion {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: background-color 0.2s;
+        }
+        
+        .btn-send-suggestion:hover {
+            background-color: #218838;
+        }
+        
+        .suggestion-status {
+            margin-top: 10px;
+            font-size: 0.9rem;
+        }
+        
+        .success-message {
+            color: #28a745;
+        }
+        
+        .error-message {
+            color: #dc3545;
+        }
+        
+        /* Estilos para notificaciones */
+        .notifications-container {
+            position: fixed;
+            bottom: 20px;
+            right: 200px;
+            z-index: 1000;
+        }
+        
+        .notifications-icon {
+            background-color: #6c757d;
+            color: white;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            position: relative;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+        
+        .notifications-icon:hover {
+            background-color: #5a6268;
+            transform: translateY(-2px);
+        }
+        
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: #dc3545;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 0.7rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            display: none;
+        }
+        
+        .notification-badge.show {
+            display: flex;
+        }
+        
+        .notifications-popup {
+            position: absolute;
+            bottom: 60px;
+            right: 0;
+            width: 350px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            display: none;
+            overflow: hidden;
+            transition: all 0.3s;
+            transform: translateY(20px);
+            opacity: 0;
+        }
+        
+        .notifications-popup.show {
+            display: block;
+            transform: translateY(0);
+            opacity: 1;
+        }
+        
+        .notifications-header {
+            background-color: #6c757d;
+            color: white;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .notifications-header h3 {
+            margin: 0;
+            font-size: 1rem;
+        }
+        
+        .close-notifications {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        
+        .notifications-body {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .notification-item {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .notification-item:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .notification-unread {
+            background-color: #e6f3ff;
+        }
+        
+        .notification-icon {
+            color: #007bff;
+            font-size: 1.2rem;
+            width: 24px;
+            text-align: center;
+        }
+        
+        .notification-content {
+            flex-grow: 1;
+        }
+        
+        .notification-text {
+            margin-bottom: 5px;
+        }
+        
+        .notification-time {
+            font-size: 0.8rem;
+            color: #6c757d;
+        }
+        
+        .notification-link {
+            color: #007bff;
+            text-decoration: none;
+        }
+        
+        .no-notifications, .loading-notifications {
+            padding: 30px;
+            text-align: center;
+            color: #6c757d;
+        }
+        
+        @media (max-width: 768px) {
+            .notifications-container {
+                bottom: 20px;
+                right: 90px;
+            }
+            
+            .notifications-popup, .chat-popup {
+                width: 280px;
+            }
+        }
     </style>
     
     {% block extra_head %}{% endblock %}
@@ -283,8 +754,9 @@
                 {% endif %}
 
                 {% if user.is_staff or user.is_superuser %}
-                    <li><a href="{% url 'admin:index' %}"><i class="fas fa-cog"></i> Administración</a></li>
-                {% endif %}
+    <li><a href="{% url 'admin:index' %}"><i class="fas fa-cog"></i> Administración</a></li>
+    <li><a href="{% url 'suggestions_list' %}"><i class="fas fa-comment-dots"></i> Sugerencias <span class="admin-badge" id="admin-suggestions-count"></span></a></li>
+{% endif %}
             </ul>
             
             <div class="search-container">
@@ -489,6 +961,261 @@
             }
         });
     </script>
+    
+    <!-- Chat de sugerencias flotante -->
+    {% if user.is_authenticated %}
+    <div class="chat-container">
+        <div class="chat-button" id="toggle-chat">
+            <i class="fas fa-comments"></i>
+            <span>Sugerencias</span>
+        </div>
+        
+        <div class="chat-popup" id="chat-popup">
+            <div class="chat-header">
+                <h3>Envía una sugerencia</h3>
+                <button class="close-chat" id="close-chat"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="chat-body">
+                <form id="suggestion-form" method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <textarea name="message" id="suggestion-message" class="suggestion-input" rows="3" placeholder="Escribe tu sugerencia aquí..."></textarea>
+                    </div>
+                    <button type="submit" class="btn-send-suggestion">
+                        <i class="fas fa-paper-plane"></i> Enviar
+                    </button>
+                </form>
+                <div id="suggestion-status" class="suggestion-status"></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Notificaciones -->
+    <div class="notifications-container">
+        <div class="notifications-icon" id="notifications-icon">
+            <i class="fas fa-bell"></i>
+            <span class="notification-badge" id="notification-count"></span>
+        </div>
+        
+        <div class="notifications-popup" id="notifications-popup">
+            <div class="notifications-header">
+                <h3>Notificaciones</h3>
+                <button class="close-notifications" id="close-notifications">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="notifications-body" id="notifications-list">
+                <div class="loading-notifications">Cargando...</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Script para el chat y notificaciones -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Chat de sugerencias
+            const chatButton = document.getElementById('toggle-chat');
+            const chatPopup = document.getElementById('chat-popup');
+            const closeChat = document.getElementById('close-chat');
+            const suggestionForm = document.getElementById('suggestion-form');
+            const suggestionStatus = document.getElementById('suggestion-status');
+            
+            // Mostrar/ocultar chat
+            chatButton.addEventListener('click', function() {
+                chatPopup.classList.toggle('show');
+            });
+            
+            closeChat.addEventListener('click', function() {
+                chatPopup.classList.remove('show');
+            });
+            
+            // Enviar sugerencia
+            suggestionForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const message = document.getElementById('suggestion-message').value.trim();
+                if (!message) {
+                    suggestionStatus.innerHTML = '<div class="error-message">Por favor escribe un mensaje</div>';
+                    return;
+                }
+                
+                const formData = new FormData(suggestionForm);
+                
+                fetch('{% url "submit_suggestion" %}', {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRFToken': formData.get('csrfmiddlewaretoken')
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        suggestionStatus.innerHTML = '<div class="success-message">' + data.message + '</div>';
+                        suggestionForm.reset();
+                        
+                        // Ocultar el mensaje después de 3 segundos
+                        setTimeout(() => {
+                            suggestionStatus.innerHTML = '';
+                            chatPopup.classList.remove('show');
+                        }, 3000);
+                    } else {
+                        suggestionStatus.innerHTML = '<div class="error-message">' + data.message + '</div>';
+                    }
+                })
+                .catch(error => {
+                    suggestionStatus.innerHTML = '<div class="error-message">Error al enviar: ' + error + '</div>';
+                });
+            });
+            
+            // Notificaciones
+            const notificationsIcon = document.getElementById('notifications-icon');
+            const notificationsPopup = document.getElementById('notifications-popup');
+            const closeNotifications = document.getElementById('close-notifications');
+            const notificationsList = document.getElementById('notifications-list');
+            const notificationCount = document.getElementById('notification-count');
+            
+            // Mostrar/ocultar notificaciones
+            notificationsIcon.addEventListener('click', function() {
+                notificationsPopup.classList.toggle('show');
+                loadNotifications();
+            });
+            
+            closeNotifications.addEventListener('click', function() {
+                notificationsPopup.classList.remove('show');
+            });
+            
+            // Cargar notificaciones
+            function loadNotifications() {
+                fetch('{% url "get_notifications" %}', {
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Verificar si hay un error en la respuesta
+                    if (data.error) {
+                        console.error('Error del servidor:', data.error);
+                        notificationsList.innerHTML = `<div class="error-message">Error: ${data.error}</div>`;
+                        return;
+                    }
+                    
+                    // Actualizar contador
+                    if (data.unread_count > 0) {
+                        notificationCount.textContent = data.unread_count;
+                        notificationCount.classList.add('show');
+                    } else {
+                        notificationCount.textContent = '';
+                        notificationCount.classList.remove('show');
+                    }
+                    
+                    // Mostrar notificaciones
+                    if (data.notifications.length === 0) {
+                        notificationsList.innerHTML = '<div class="no-notifications">No tienes notificaciones</div>';
+                        return;
+                    }
+                    
+                    let notificationsHtml = '';
+                    data.notifications.forEach(notification => {
+                        const readClass = notification.is_read ? 'notification-read' : 'notification-unread';
+                        let icon = '';
+                        
+                        switch(notification.type) {
+                            case 'repost':
+                                icon = '<i class="fas fa-retweet"></i>';
+                                break;
+                            case 'suggestion':
+                                icon = '<i class="fas fa-comment-dots"></i>';
+                                break;
+                            case 'comment':
+                                icon = '<i class="fas fa-comment"></i>';
+                                break;
+                            default:
+                                icon = '<i class="fas fa-bell"></i>';
+                        }
+                        
+                        notificationsHtml += `
+                            <div class="notification-item ${readClass}" data-id="${notification.id}">
+                                <div class="notification-icon">${icon}</div>
+                                <div class="notification-content">
+                                    <div class="notification-text">${notification.content}</div>
+                                    <div class="notification-time">${notification.time}</div>
+                                </div>
+                                ${notification.url ? `<a href="${notification.url}" class="notification-link">Ver</a>` : ''}
+                            </div>
+                        `;
+                    });
+                    
+                    notificationsList.innerHTML = notificationsHtml;
+                    
+                    // Añadir evento click para marcar como leída
+                    document.querySelectorAll('.notification-item').forEach(item => {
+                        item.addEventListener('click', function() {
+                            const notificationId = this.dataset.id;
+                            markAsRead(notificationId);
+                            this.classList.remove('notification-unread');
+                            this.classList.add('notification-read');
+                        });
+                    });
+                })
+                .catch(error => {
+                    console.error('Error al cargar notificaciones:', error);
+                    notificationsList.innerHTML = '<div class="error-message">Error al cargar notificaciones</div>';
+                });
+            }
+            
+            // Marcar notificación como leída
+            function markAsRead(notificationId) {
+                fetch(`{% url "mark_notification_read" 0 %}`.replace('0', notificationId), {
+                    method: 'POST',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        // Actualizar contador
+                        loadNotifications();
+                    } else {
+                        console.error('Error al marcar como leída:', data.message || 'Error desconocido');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error en la solicitud:', error);
+                });
+            }
+            
+            // Cargar notificaciones cada 5 segundos
+            setInterval(function() {
+                if (!notificationsPopup.classList.contains('show')) {
+                    // Solo actualizar contador si el popup está cerrado
+                    fetch('{% url "get_notifications" %}')
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.unread_count > 0) {
+                            notificationCount.textContent = data.unread_count;
+                            notificationCount.classList.add('show');
+                        } else {
+                            notificationCount.textContent = '';
+                            notificationCount.classList.remove('show');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error al actualizar contador:', error);
+                    });
+                }
+            }, 5000);  // Reducido de 30000 a 5000 ms
+            
+            // Cargar notificaciones al inicio
+            loadNotifications();
+        });
+    </script>
+    {% endif %}
     
     {% block extrajs %}{% endblock %}
 </body>

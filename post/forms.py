@@ -1,5 +1,5 @@
 from django import forms
-from .models import Recipe, Comment, Profile, Repost
+from .models import Recipe, Comment, Profile, Repost, Suggestion
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
@@ -78,4 +78,16 @@ class RepostForm(forms.ModelForm):
         fields = ['comment']
         widgets = {
             'comment': forms.Textarea(attrs={'placeholder': 'Añade un comentario a este repost...', 'rows': 3}),
+        }
+
+class SuggestionForm(forms.ModelForm):
+    class Meta:
+        model = Suggestion
+        fields = ['message']
+        widgets = {
+            'message': forms.Textarea(attrs={
+                'placeholder': 'Escribe tu sugerencia aquí...', 
+                'rows': 3,
+                'class': 'suggestion-input'
+            }),
         }
