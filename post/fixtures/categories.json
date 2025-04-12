@@ -1,0 +1,12 @@
+[
+    {"model": "post.category", "pk": 1, "fields": {"name": "Desayunos"}},
+    {"model": "post.category", "pk": 2, "fields": {"name": "Almuerzo"}},
+    {"model": "post.category", "pk": 3, "fields": {"name": "Cena"}},
+    {"model": "post.category", "pk": 4, "fields": {"name": "Postres"}},
+    {"model": "post.category", "pk": 5, "fields": {"name": "Sopas"}},
+    {"model": "post.category", "pk": 6, "fields": {"name": "Ensaladas"}},
+    {"model": "post.category", "pk": 7, "fields": {"name": "Bebidas"}},
+    {"model": "post.category", "pk": 8, "fields": {"name": "Vegetariano"}},
+    {"model": "post.category", "pk": 9, "fields": {"name": "Vegano"}},
+    {"model": "post.category", "pk": 10, "fields": {"name": "Sin Gluten"}}
+  ]

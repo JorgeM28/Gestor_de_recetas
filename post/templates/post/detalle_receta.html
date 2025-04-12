@@ -1,0 +1,127 @@
+{% extends "post/base.html" %}
+{% load static %}
+
+{% block extra_head %} 
+<title>{{ receta.title }}</title>
+<link rel="stylesheet" href="{% static 'post/css/detalle_receta.css' %}">
+{% endblock extra_head%}
+
+{% block content %}
+<div class="detalle-receta">
+    <h1 class="receta-title">{{ receta.title }}</h1>
+    
+    <div class="receta-meta">
+        <div class="receta-author">
+            {% if receta.author.profile.profile_image %}
+                <img src="{{ receta.author.profile.profile_image.url }}" alt="{{ receta.author.username }}" class="author-img">
+            {% else %}
+                <i class="fas fa-user-circle author-icon"></i>
+            {% endif %}
+            <!-- Reemplaza donde aparece el nombre del autor -->
+            <div class="author-info">
+                <a href="{% url 'perfil_publico' receta.author.username %}">{{ receta.author.username }}</a>
+                <span class="receta-date">{{ receta.created_at|date:"d M Y" }}</span>
+            </div>
+        </div>
+        
+        <div class="receta-info">
+            <span class="info-item"><i class="fas fa-clock"></i> Preparación: {{ receta.prep_time }} min</span>
+            <span class="info-item"><i class="fas fa-fire"></i> Cocción: {{ receta.cook_time }} min</span>
+            <span class="info-item"><i class="fas fa-clock"></i> Tiempo total: {{ tiempo_total }} min</span>
+            <span class="info-item"><i class="fas fa-utensils"></i> Porciones: {{ receta.servings }}</span>
+            <span class="info-item"><i class="fas fa-signal"></i> Dificultad: {{ receta.get_difficulty_display }}</span>
+            <span class="info-item"><i class="fas fa-tag"></i> {{ receta.category.name|default:"Sin categoría" }}</span>
+        </div>
+    </div>
+    
+    {% if receta.recipe_image %}
+    <div class="receta-image">
+        <img src="{{ receta.recipe_image.url }}" alt="{{ receta.title }}">
+    </div>
+    {% endif %}
+    
+    <div class="receta-content">
+        <div class="receta-section">
+            <h2><i class="fas fa-list"></i> Ingredientes</h2>
+            <div class="ingredientes">
+                {% for ingrediente in receta.ingredients.splitlines %}
+                    {% if ingrediente %}
+                        <div class="ingrediente-item">
+                            <input type="checkbox" id="ing-{{ forloop.counter }}">
+                            <label for="ing-{{ forloop.counter }}">{{ ingrediente }}</label>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+        
+        <div class="receta-section">
+            <h2><i class="fas fa-tasks"></i> Instrucciones</h2>
+            <div class="instrucciones">
+                {% with instrucciones=receta.instructions|linebreaksbr %}
+                    {{ instrucciones }}
+                {% endwith %}
+            </div>
+        </div>
+    </div>
+    
+    {% if user.is_authenticated %}
+        <div class="receta-actions">
+            <a href="{% url 'recetas' %}" class="btn-volver"><i class="fas fa-arrow-left"></i> Volver a Recetas</a>
+            
+            {% if user != receta.author %}
+                <a href="{% url 'repost_recipe' receta.id %}" class="btn-repost"><i class="fas fa-retweet"></i> Repostear</a>
+            {% endif %}
+            
+            {% if user == receta.author or user.is_superuser or user.is_staff %}
+                <a href="{% url 'editar_receta' receta.id %}" class="btn-editar"><i class="fas fa-edit"></i> Editar</a>
+                <a href="{% url 'eliminar_receta' receta.id %}" class="btn-eliminar"><i class="fas fa-trash"></i> Eliminar</a>
+            {% endif %}
+        </div>
+    {% else %}
+        <div class="receta-actions">
+            <a href="{% url 'index' %}" class="btn-volver"><i class="fas fa-arrow-left"></i> Volver al Inicio</a>
+        </div>
+    {% endif %}
+</div>
+
+<!-- Sección de Comentarios -->
+<div class="comentarios-section">
+    <h3><i class="fas fa-comments"></i> Comentarios ({{ comentarios.count }})</h3>
+    {% for comentario in comentarios %}
+        <div class="comentario">
+            <div class="comentario-header">
+                {% if comentario.author.profile.profile_image %}
+                    <img src="{{ comentario.author.profile.profile_image.url }}" alt="{{ comentario.author.username }}" class="comentario-author-img">
+                {% else %}
+                    <i class="fas fa-user-circle comentario-author-icon"></i>
+                {% endif %}
+                <div class="comentario-meta">
+                    <span class="comentario-author">{{ comentario.author.username }}</span>
+                    <span class="comentario-date">{{ comentario.created_at|date:"d M Y H:i" }}</span>
+                </div>
+            </div>
+            <p class="comentario-content">{{ comentario.content }}</p>
+        </div>
+    {% empty %}
+        <p class="no-comentarios">No hay comentarios aún. ¡Sé el primero en comentar!</p>
+    {% endfor %}
+
+    <!-- Formulario para agregar comentario -->
+    {% if user.is_authenticated %}
+    <div class="nuevo-comentario">
+        <h4><i class="fas fa-comment-dots"></i> Deja tu comentario</h4>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.content }}
+            <button type="submit" class="btn-comentar"><i class="fas fa-paper-plane"></i> Publicar Comentario</button>
+        </form>
+    </div>
+    {% else %}
+    <div class="login-to-comment">
+        <p>Inicia sesión para dejar un comentario</p>
+        <a href="{% url 'login' %}" class="btn-login">Iniciar Sesión</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

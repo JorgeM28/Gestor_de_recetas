@@ -1,0 +1,229 @@
+{% extends 'post/base.html' %}
+{% load static %}
+
+{% block extra_head %} 
+<title>Categorías de Recetas</title>
+<style>
+    .categorias-container {
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+    
+    .categorias-header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    
+    .categorias-header h1 {
+        font-size: 2rem;
+        color: #333;
+        margin-bottom: 15px;
+    }
+    
+    .categorias-filtro {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+        margin-bottom: 30px;
+        padding: 15px;
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    
+    .btn-categoria {
+        padding: 8px 15px;
+        background-color: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 30px;
+        color: #495057;
+        text-decoration: none;
+        font-size: 0.9rem;
+        transition: all 0.2s;
+    }
+    
+    .btn-categoria:hover {
+        background-color: #e9ecef;
+    }
+    
+    .btn-categoria.active {
+        background-color: #007bff;
+        color: white;
+        border-color: #007bff;
+    }
+    
+    .grid-recetas {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 25px;
+    }
+    
+    .tarjeta-receta {
+        background-color: white;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+        transition: transform 0.3s ease;
+    }
+    
+    .tarjeta-receta:hover {
+        transform: translateY(-5px);
+    }
+    
+    .receta-img {
+        height: 180px;
+        overflow: hidden;
+    }
+    
+    .receta-img img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+    }
+    
+    .receta-img.no-image {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #e9ecef;
+    }
+    
+    .receta-img.no-image i {
+        font-size: 50px;
+        color: #adb5bd;
+    }
+    
+    .tarjeta-receta:hover .receta-img img {
+        transform: scale(1.05);
+    }
+    
+    .receta-content {
+        padding: 15px;
+    }
+    
+    .receta-title {
+        font-size: 1.3rem;
+        margin-bottom: 12px;
+    }
+    
+    .receta-title a {
+        color: #333;
+        text-decoration: none;
+    }
+    
+    .receta-title a:hover {
+        color: #007bff;
+    }
+    
+    .receta-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 10px;
+    }
+    
+    .receta-meta span {
+        font-size: 0.85rem;
+        color: #666;
+    }
+    
+    .receta-meta span i {
+        color: #007bff;
+        margin-right: 5px;
+    }
+    
+    .receta-author {
+        font-size: 0.85rem;
+        color: #666;
+        margin-top: 10px;
+    }
+    
+    .no-recetas {
+        text-align: center;
+        padding: 40px 20px;
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+    }
+    
+    .no-recetas i {
+        font-size: 50px;
+        color: #dee2e6;
+        margin-bottom: 15px;
+    }
+    
+    .no-recetas h3 {
+        color: #495057;
+        margin-bottom: 10px;
+    }
+    
+    @media (max-width: 768px) {
+        .grid-recetas {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock extra_head%}
+
+{% block content %}
+<div class="categorias-container">
+    <div class="categorias-header">
+        <h1><i class="fas fa-tag"></i> Categorías de Recetas</h1>
+        <p>Explora nuestras deliciosas recetas por categoría</p>
+    </div>
+    
+    <div class="categorias-filtro">
+        <a href="{% url 'categorias' %}" class="btn-categoria {% if not categoria_seleccionada %}active{% endif %}">
+            Todas las categorías
+        </a>
+        {% for categoria in categorias %}
+            <a href="{% url 'categorias' %}?categoria={{ categoria.id }}" 
+               class="btn-categoria {% if categoria_seleccionada|stringformat:'s' == categoria.id|stringformat:'s' %}active{% endif %}">
+                {{ categoria.name }}
+            </a>
+        {% endfor %}
+    </div>
+    
+    {% if recetas %}
+        <div class="grid-recetas">
+            {% for receta in recetas %}
+                <div class="tarjeta-receta">
+                    {% if receta.recipe_image %}
+                        <div class="receta-img">
+                            <img src="{{ receta.recipe_image.url }}" alt="{{ receta.title }}">
+                        </div>
+                    {% else %}
+                        <div class="receta-img no-image">
+                            <i class="fas fa-utensils"></i>
+                        </div>
+                    {% endif %}
+                    
+                    <div class="receta-content">
+                        <h2 class="receta-title">
+                            <a href="{% url 'detalle_receta' receta.id %}">{{ receta.title }}</a>
+                        </h2>
+                        
+                        <div class="receta-meta">
+                            <span><i class="fas fa-clock"></i> Total: {{ receta.total_time }} min</span>
+                            <span><i class="fas fa-utensils"></i> {{ receta.servings }} porciones</span>
+                            <span><i class="fas fa-signal"></i> {{ receta.get_difficulty_display }}</span>
+                        </div>
+                        
+                        <p class="receta-author">
+                            Por: {{ receta.author.username }} | {{ receta.created_at|date:"d M Y" }}
+                        </p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="no-recetas">
+            <i class="fas fa-search"></i>
+            <h3>No se encontraron recetas en esta categoría</h3>
+            <p>Intenta con otra categoría o agrega una nueva receta.</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock content %}

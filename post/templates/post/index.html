@@ -1,0 +1,44 @@
+{% extends 'post/base.html' %}
+{% load static %}
+
+{% block extra_head %} 
+<title>Recetas - Página Principal</title>
+<link rel="stylesheet" href="{% static 'post/css/index.css' %}">
+{% endblock extra_head%}
+
+{% block content %}
+<h1>Recetas recientes</h1>
+
+<div class="grid-recetas">
+    {% for receta in recetas_recientes %}
+        <div class="tarjeta-receta">
+            {% if receta.recipe_image %}
+                <div class="receta-img">
+                    <img src="{{ receta.recipe_image.url }}" alt="{{ receta.title }}">
+                </div>
+            {% endif %}
+            <h2 class="receta-title">
+                <a href="{% url 'detalle_receta' receta.id %}">{{ receta.title }}</a>
+            </h2>
+            <div class="receta-meta">
+                <span><i class="fas fa-clock"></i> Preparación: {{ receta.prep_time }} min</span>
+                <span><i class="fas fa-fire"></i> Cocción: {{ receta.cook_time }} min</span>
+                <span><i class="fas fa-utensils"></i> Porciones: {{ receta.servings }}</span>
+            </div>
+            <p class="receta-author">
+                Por: {{ receta.author.username }} | {{ receta.created_at|date:"d M Y" }}
+            </p>
+        </div>
+    {% empty %}
+        <p>No hay recetas recientes.</p>
+    {% endfor %}
+</div>
+
+{% if user.is_authenticated %}
+<div class="action-button">
+    <a href="{% url 'nueva_receta' %}" class="btn-add-recipe">
+        <i class="fas fa-plus"></i> Nueva Receta
+    </a>
+</div>
+{% endif %}
+{% endblock content%}

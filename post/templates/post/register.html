@@ -1,0 +1,80 @@
+{% extends 'post/base.html' %}
+{% load static %}
+
+{% block extra_head %}
+<title>Registro</title>
+<link rel="stylesheet" href="{% static 'post/css/register.css' %}">
+{% endblock extra_head %}
+
+{% block content %}
+<div class="register-container">
+    <h1>Crear una cuenta</h1>
+    
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    
+    <form method="POST" class="register-form">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label for="{{ form.username.id_for_label }}">Nombre de usuario:</label>
+            {{ form.username }}
+            {% if form.username.errors %}
+                <div class="error-message">{{ form.username.errors.0 }}</div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form.first_name.id_for_label }}">Nombre:</label>
+            {{ form.first_name }}
+            {% if form.first_name.errors %}
+                <div class="error-message">{{ form.first_name.errors.0 }}</div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form.last_name.id_for_label }}">Apellido:</label>
+            {{ form.last_name }}
+            {% if form.last_name.errors %}
+                <div class="error-message">{{ form.last_name.errors.0 }}</div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form.email.id_for_label }}">Correo electrónico:</label>
+            {{ form.email }}
+            {% if form.email.errors %}
+                <div class="error-message">{{ form.email.errors.0 }}</div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form.password1.id_for_label }}">Contraseña:</label>
+            {{ form.password1 }}
+            {% if form.password1.errors %}
+                <div class="error-message">{{ form.password1.errors.0 }}</div>
+            {% endif %}
+            <small class="form-text text-muted">La contraseña debe tener al menos 8 caracteres y no puede ser demasiado común.</small>
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form.password2.id_for_label }}">Confirmar contraseña:</label>
+            {{ form.password2 }}
+            {% if form.password2.errors %}
+                <div class="error-message">{{ form.password2.errors.0 }}</div>
+            {% endif %}
+        </div>
+
+        <button type="submit">Registrarse</button>
+        
+        <div class="login-link">
+            ¿Ya tienes una cuenta? <a href="{% url 'login' %}">Inicia sesión aquí</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

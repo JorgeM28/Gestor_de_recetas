@@ -1,0 +1,347 @@
+{% extends 'post/base.html' %}
+{% load static %}
+
+{% block extra_head %} 
+<title>Perfil de {{ profile_user.username }}</title>
+<style>
+    .perfil-container {
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+    
+    .perfil-header {
+        display: flex;
+        align-items: center;
+        gap: 30px;
+        background-color: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+        margin-bottom: 30px;
+    }
+    
+    .perfil-avatar {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        overflow: hidden;
+    }
+    
+    .perfil-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    
+    .perfil-avatar-icon {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        background-color: #e9ecef;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .perfil-avatar-icon i {
+        font-size: 60px;
+        color: #adb5bd;
+    }
+    
+    .perfil-info {
+        flex-grow: 1;
+    }
+    
+    .perfil-nombre {
+        font-size: 1.8rem;
+        color: #333;
+        margin-bottom: 5px;
+    }
+    
+    .perfil-bio {
+        color: #666;
+        margin-bottom: 15px;
+    }
+    
+    .perfil-stats {
+        display: flex;
+        gap: 25px;
+        flex-wrap: wrap;
+    }
+    
+    .stat-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    
+    .stat-item i {
+        color: #007bff;
+    }
+    
+    .perfil-content {
+        display: grid;
+        gap: 30px;
+    }
+    
+    .perfil-section {
+        background-color: white;
+        padding: 25px;
+        border-radius: 10px;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+    }
+    
+    .section-title {
+        font-size: 1.3rem;
+        color: #333;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .section-title i {
+        color: #007bff;
+    }
+    
+    .grid-recetas {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 20px;
+    }
+    
+    .tarjeta-receta {
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        overflow: hidden;
+        transition: transform 0.3s ease;
+    }
+    
+    .tarjeta-receta:hover {
+        transform: translateY(-5px);
+    }
+    
+    .receta-img {
+        height: 160px;
+        overflow: hidden;
+    }
+    
+    .receta-img img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+    
+    .tarjeta-receta:hover .receta-img img {
+        transform: scale(1.05);
+    }
+    
+    .receta-content {
+        padding: 15px;
+    }
+    
+    .receta-title {
+        font-size: 1.1rem;
+        margin-bottom: 8px;
+    }
+    
+    .receta-title a {
+        color: #333;
+        text-decoration: none;
+    }
+    
+    .receta-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        font-size: 0.85rem;
+        color: #666;
+    }
+    
+    .receta-meta i {
+        color: #007bff;
+        margin-right: 3px;
+    }
+    
+    .categorias-usadas {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-top: 15px;
+    }
+    
+    .categoria-tag {
+        background-color: #e9ecef;
+        padding: 5px 10px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        color: #495057;
+    }
+    
+    .no-recetas {
+        text-align: center;
+        padding: 40px 0;
+    }
+    
+    .no-recetas i {
+        font-size: 50px;
+        color: #dee2e6;
+        margin-bottom: 15px;
+    }
+    
+    @media (max-width: 768px) {
+        .perfil-header {
+            flex-direction: column;
+            text-align: center;
+        }
+        
+        .perfil-stats {
+            justify-content: center;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="perfil-container">
+    <div class="perfil-header">
+        {% if profile_user.profile.profile_image %}
+            <div class="perfil-avatar">
+                <img src="{{ profile_user.profile.profile_image.url }}" alt="{{ profile_user.username }}">
+            </div>
+        {% else %}
+            <div class="perfil-avatar-icon">
+                <i class="fas fa-user"></i>
+            </div>
+        {% endif %}
+        
+        <div class="perfil-info">
+            <h1 class="perfil-nombre">{{ profile_user.username }}</h1>
+            
+            {% if profile_user.profile.bio %}
+                <p class="perfil-bio">{{ profile_user.profile.bio }}</p>
+            {% else %}
+                <p class="perfil-bio">Este usuario prefiere mantener un aire de misterio.</p>
+            {% endif %}
+            
+            <div class="perfil-stats">
+                <div class="stat-item">
+                    <i class="fas fa-utensils"></i>
+                    <span>{{ total_recetas_propias }} Recetas</span>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-retweet"></i>
+                    <span>{{ total_reposts }} Reposts</span>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Miembro desde {{ profile_user.date_joined|date:"M Y" }}</span>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-tag"></i>
+                    <span>{{ categorias_usadas.count }} Categorías</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="perfil-content">
+        <div class="perfil-section">
+            <h2 class="section-title"><i class="fas fa-utensils"></i> Recetas de {{ profile_user.username }}</h2>
+            
+            {% if recetas_propias %}
+                <div class="grid-recetas">
+                    {% for receta in recetas_propias %}
+                        <div class="tarjeta-receta">
+                            {% if receta.recipe_image %}
+                                <div class="receta-img">
+                                    <img src="{{ receta.recipe_image.url }}" alt="{{ receta.title }}">
+                                </div>
+                            {% endif %}
+                            
+                            <div class="receta-content">
+                                <h3 class="receta-title">
+                                    <a href="{% url 'detalle_receta' receta.id %}">{{ receta.title }}</a>
+                                </h3>
+                                
+                                <div class="receta-meta">
+                                    <span><i class="fas fa-clock"></i> {{ receta.total_time }} min</span>
+                                    <span><i class="fas fa-signal"></i> {{ receta.get_difficulty_display }}</span>
+                                    <span><i class="fas fa-calendar-alt"></i> {{ receta.created_at|date:"d M Y" }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="no-recetas">
+                    <i class="fas fa-search"></i>
+                    <h3>No hay recetas publicadas</h3>
+                    <p>{{ profile_user.username }} aún no ha compartido ninguna receta.</p>
+                </div>
+            {% endif %}
+        </div>
+
+        {% if reposts %}
+        <div class="perfil-section">
+            <h2 class="section-title"><i class="fas fa-retweet"></i> Recetas reposteadas</h2>
+            
+            <div class="grid-recetas">
+                {% for repost in reposts %}
+                    <div class="tarjeta-receta repost">
+                        <div class="repost-badge">
+                            <i class="fas fa-retweet"></i> Repost
+                        </div>
+                        
+                        {% if repost.original_recipe.recipe_image %}
+                            <div class="receta-img">
+                                <img src="{{ repost.original_recipe.recipe_image.url }}" alt="{{ repost.original_recipe.title }}">
+                            </div>
+                        {% endif %}
+                        
+                        <div class="receta-content">
+                            <h3 class="receta-title">
+                                <a href="{% url 'detalle_receta' repost.original_recipe.id %}">{{ repost.original_recipe.title }}</a>
+                            </h3>
+                            
+                            <div class="repost-meta">
+                                <span class="original-author">
+                                    <i class="fas fa-user"></i> Original por: 
+                                    <a href="{% url 'perfil_publico' repost.original_recipe.author.username %}">
+                                        {{ repost.original_recipe.author.username }}
+                                    </a>
+                                </span>
+                            </div>
+                            
+                            {% if repost.comment %}
+                                <div class="repost-comment">
+                                    <p>"{{ repost.comment }}"</p>
+                                </div>
+                            {% endif %}
+                            
+                            <div class="receta-meta">
+                                <span><i class="fas fa-clock"></i> {{ repost.original_recipe.total_time }} min</span>
+                                <span><i class="fas fa-signal"></i> {{ repost.original_recipe.get_difficulty_display }}</span>
+                                <span><i class="fas fa-calendar-alt"></i> {{ repost.created_at|date:"d M Y" }}</span>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        
+        {% if categorias_usadas %}
+            <div class="perfil-section">
+                <h2 class="section-title"><i class="fas fa-tag"></i> Categorías favoritas</h2>
+                <div class="categorias-usadas">
+                    {% for categoria in categorias_usadas %}
+                        <span class="categoria-tag">{{ categoria.name }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,262 @@
+{% extends 'post/base.html' %}
+{% load static %}
+
+{% block extra_head %} 
+<title>Resultados de búsqueda: {{ query }}</title>
+<style>
+    .search-results-container {
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+    
+    .search-header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    
+    .search-header h1 {
+        font-size: 1.8rem;
+        color: #333;
+        margin-bottom: 10px;
+    }
+    
+    .search-header .search-query {
+        background-color: #f8f9fa;
+        padding: 3px 8px;
+        border-radius: 4px;
+    }
+    
+    .search-section {
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        padding: 20px;
+        margin-bottom: 30px;
+    }
+    
+    .section-title {
+        font-size: 1.3rem;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #eee;
+        display: flex;
+        align-items: center;
+    }
+    
+    .section-title i {
+        margin-right: 10px;
+        color: #007bff;
+    }
+    
+    .grid-recetas {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 20px;
+    }
+    
+    .tarjeta-receta {
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        overflow: hidden;
+        transition: transform 0.3s ease;
+    }
+    
+    .tarjeta-receta:hover {
+        transform: translateY(-5px);
+    }
+    
+    .receta-img {
+        height: 160px;
+        overflow: hidden;
+    }
+    
+    .receta-img img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    
+    .receta-content {
+        padding: 15px;
+    }
+    
+    .receta-title {
+        font-size: 1.1rem;
+        margin-bottom: 8px;
+    }
+    
+    .receta-title a {
+        color: #333;
+        text-decoration: none;
+    }
+    
+    .receta-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        font-size: 0.85rem;
+        color: #666;
+    }
+    
+    .receta-meta i {
+        color: #007bff;
+        margin-right: 5px;
+    }
+    
+    .usuarios-lista {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 15px;
+    }
+    
+    .usuario-card {
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        padding: 15px;
+        display: flex;
+        align-items: center;
+        transition: transform 0.3s ease;
+    }
+    
+    .usuario-card:hover {
+        transform: translateY(-3px);
+    }
+    
+    .usuario-avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background-color: #e9ecef;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 15px;
+    }
+    
+    .usuario-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 50%;
+    }
+    
+    .usuario-avatar i {
+        font-size: 24px;
+        color: #adb5bd;
+    }
+    
+    .usuario-info {
+        flex-grow: 1;
+    }
+    
+    .usuario-nombre {
+        font-weight: 500;
+        margin-bottom: 5px;
+    }
+    
+    .usuario-nombre a {
+        color: #333;
+        text-decoration: none;
+    }
+    
+    .usuario-meta {
+        font-size: 0.8rem;
+        color: #6c757d;
+    }
+    
+    .no-results {
+        text-align: center;
+        padding: 30px;
+    }
+    
+    .no-results i {
+        font-size: 40px;
+        color: #dee2e6;
+        margin-bottom: 15px;
+    }
+    
+    .highlight {
+        background-color: #fff3cd;
+        padding: 0 2px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="search-results-container">
+    <div class="search-header">
+        <h1>Resultados de búsqueda para <span class="search-query">"{{ query }}"</span></h1>
+        <p>Se encontraron {{ total_recetas }} recetas y {{ total_usuarios }} usuarios</p>
+    </div>
+    
+    {% if recetas %}
+    <div class="search-section">
+        <h2 class="section-title"><i class="fas fa-utensils"></i> Recetas</h2>
+        <div class="grid-recetas">
+            {% for receta in recetas %}
+                <div class="tarjeta-receta">
+                    {% if receta.recipe_image %}
+                        <div class="receta-img">
+                            <img src="{{ receta.recipe_image.url }}" alt="{{ receta.title }}">
+                        </div>
+                    {% else %}
+                        <div class="receta-img" style="display:flex;align-items:center;justify-content:center;background:#f8f9fa;">
+                            <i class="fas fa-utensils" style="font-size:40px;color:#dee2e6;"></i>
+                        </div>
+                    {% endif %}
+                    
+                    <div class="receta-content">
+                        <h3 class="receta-title">
+                            <a href="{% url 'detalle_receta' receta.id %}">{{ receta.title }}</a>
+                        </h3>
+                        
+                        <div class="receta-meta">
+                            <span><i class="fas fa-user"></i> {{ receta.author.username }}</span>
+                            <span><i class="fas fa-signal"></i> {{ receta.get_difficulty_display }}</span>
+                            {% if receta.category %}
+                                <span><i class="fas fa-tag"></i> {{ receta.category.name }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+    
+    {% if usuarios %}
+    <div class="search-section">
+        <h2 class="section-title"><i class="fas fa-users"></i> Usuarios</h2>
+        <div class="usuarios-lista">
+            {% for usuario in usuarios %}
+                <div class="usuario-card">
+                    <div class="usuario-avatar">
+                        {% if usuario.profile.profile_image %}
+                            <img src="{{ usuario.profile.profile_image.url }}" alt="{{ usuario.username }}">
+                        {% else %}
+                            <i class="fas fa-user"></i>
+                        {% endif %}
+                    </div>
+                    <div class="usuario-info">
+                        <h3 class="usuario-nombre">
+                            <a href="{% url 'perfil_publico' usuario.username %}">{{ usuario.username }}</a>
+                        </h3>
+                        <div class="usuario-meta">
+                            <span>{{ usuario.recipe_set.filter.count }} recetas</span>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+    
+    {% if not recetas and not usuarios %}
+        <div class="search-section no-results">
+            <i class="fas fa-search"></i>
+            <h3>No se encontraron resultados</h3>
+            <p>Intenta buscar con otros términos o revisa la ortografía.</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

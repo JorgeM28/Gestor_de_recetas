@@ -1,0 +1,495 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Fuentes de Google -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome para iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'post/css/base.css' %}">
+    
+    <!-- Estilos base mejorados -->
+    <style>
+        :root {
+            --primary-color: #007bff;
+            --secondary-color: #6c757d;
+            --dark-color: #333;
+            --light-color: #f8f9fa;
+            --danger-color: #dc3545;
+            --success-color: #28a745;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.6;
+            background-color: #f5f7fa;
+            color: #333;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Playfair Display', serif;
+        }
+        
+        a {
+            text-decoration: none;
+            color: var(--primary-color);
+        }
+        
+        /* Navbar mejorado */
+        #navbar {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+        
+        #navbar ul {
+            display: flex;
+            gap: 20px;
+            list-style: none;
+        }
+        
+        #navbar ul li a {
+            color: var(--dark-color);
+            font-weight: 500;
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 8px 12px;
+        }
+        
+        #navbar ul li a:hover {
+            color: var(--primary-color);
+            background-color: rgba(0, 123, 255, 0.1);
+            border-radius: 4px;
+        }
+        
+        /* Header mejorado */
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            background-color: #fff;
+            border-bottom: 1px solid #eee;
+        }
+        
+        header h1 {
+            font-size: 2.5rem;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        /* Contenido principal */
+        .page_content {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+            min-height: 60vh;
+        }
+        
+        /* Footer mejorado */
+        footer {
+            background-color: #333;
+            color: white;
+            padding: 25px 0;
+            text-align: center;
+            margin-top: 60px;
+        }
+        
+        footer p {
+            margin: 0;
+            font-size: 1rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            #navbar {
+                flex-direction: column;
+                padding: 15px;
+            }
+            
+            #navbar ul {
+                flex-direction: column;
+                width: 100%;
+                gap: 10px;
+                margin-bottom: 15px;
+            }
+            
+            #navbar ul li a {
+                padding: 10px;
+                display: block;
+            }
+        }
+
+        /* Estilos para la barra de búsqueda */
+        .search-container {
+            position: relative;
+            margin-left: auto;
+            margin-right: 15px;
+            max-width: 300px;
+            width: 100%;
+        }
+
+        .search-container form {
+            display: flex;
+            align-items: center;
+        }
+
+        .search-container input {
+            flex-grow: 1;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px 0 0 4px;
+            font-size: 0.9rem;
+        }
+
+        .search-container button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+        }
+
+        .search-results-preview {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background: white;
+            border-radius: 0 0 4px 4px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            z-index: 1000;
+            max-height: 300px;
+            overflow-y: auto;
+            display: none;
+        }
+
+        .search-result-item {
+            padding: 10px 15px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            transition: background-color 0.2s;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .search-result-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .search-result-item img, .search-result-item .icon-placeholder {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .search-result-item .icon-placeholder {
+            background-color: #e9ecef;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #adb5bd;
+        }
+
+        .result-info {
+            flex-grow: 1;
+        }
+
+        .result-title {
+            font-weight: 500;
+            margin-bottom: 2px;
+        }
+
+        .result-meta {
+            font-size: 0.8rem;
+            color: #6c757d;
+        }
+
+        .search-category {
+            background-color: #f1f1f1;
+            padding: 5px 15px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: #495057;
+        }
+
+        .result-highlight {
+            background-color: #fff3cd;
+            padding: 0 2px;
+        }
+
+        .view-all {
+            padding: 10px 15px;
+            text-align: center;
+            background-color: #f8f9fa;
+            color: #007bff;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        /* Ajusta el navbar para dispositivos móviles */
+        @media (max-width: 768px) {
+            #navbar {
+                flex-direction: column;
+            }
+            
+            .search-container {
+                margin: 10px 0;
+                max-width: 100%;
+            }
+        }
+    </style>
+    
+    {% block extra_head %}{% endblock %}
+</head>
+
+<body>
+    <main>
+        <header>
+            {% if user.is_authenticated %}
+            <h1>Hora de cocinar {{ user.username }}</h1>
+            <p>Organiza tus recetas, cocina con amor y nunca olvides ese toque especial.</p>
+            {% else %}
+            <h1>Rincón de Sabor</h1>
+            <p>Tu cocina te espera. Inicia sesión y vuelve a darle sabor a tus recetas favoritas.</p>
+            {% endif %}
+        </header>
+        
+        <nav id="navbar">
+            <ul>
+                <li><a href="{% url 'index' %}"><i class="fas fa-home"></i> Inicio</a></li>
+                {% if user.is_authenticated %}
+                    <li><a href="{% url 'categorias' %}"><i class="fas fa-tag"></i> Categorías</a></li>
+                    <li><a href="{% url 'recetas' %}"><i class="fas fa-utensils"></i> Mis Recetas</a></li>
+                    
+                {% endif %}
+
+                {% if user.is_staff or user.is_superuser %}
+                    <li><a href="{% url 'admin:index' %}"><i class="fas fa-cog"></i> Administración</a></li>
+                {% endif %}
+            </ul>
+            
+            <div class="search-container">
+                <form action="{% url 'buscar' %}" method="GET" id="search-form">
+                    <input type="text" name="q" id="search-input" placeholder="Buscar recetas o usuarios..." autocomplete="off">
+                    <button type="submit"><i class="fas fa-search"></i></button>
+                </form>
+                <div id="search-results-preview" class="search-results-preview"></div>
+            </div>
+
+            <div>
+                {% if user.is_authenticated %}
+                    <p>
+                        <a href="{% url 'perfil' %}" class="btn-profile"><i class="fas fa-user-circle"></i> Mi Perfil</a> | 
+                        <a class="btn-logout" href="#" onClick="document.getElementById('logoutform').submit()">
+                            <i class="fas fa-sign-out-alt"></i> Salir
+                        </a>
+                        <form id="logoutform" method="POST" action="{% url 'logout' %}">
+                            {% csrf_token %}
+                            <input type="hidden">
+                        </form>
+                    </p>
+                {% else %}
+                    <a href="{% url 'login' %}" class="btn-login"><i class="fas fa-sign-in-alt"></i> Iniciar Sesión</a>
+                {% endif %}
+            </div>
+        </nav>
+        
+        <section class="page_content">
+            {% block content %}{% endblock %}
+        </section>
+        
+        <footer>
+            <p>UIS Programación Web 2025-I | Desarrollado con <i class="fas fa-heart" style="color: #dc3545;"></i> y Django</p>
+        </footer>
+    </main>
+
+    <!-- Script para efectos de navegación -->
+    <script>
+        // Resaltar enlace actual
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentPath = window.location.pathname;
+            const navLinks = document.querySelectorAll('#navbar a');
+            
+            navLinks.forEach(link => {
+                if (link.getAttribute('href') === currentPath) {
+                    link.style.color = '#007bff';
+                    link.style.fontWeight = '700';
+                }
+            });
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('search-input');
+            const resultsPreview = document.getElementById('search-results-preview');
+            const searchForm = document.getElementById('search-form');
+            
+            let typingTimer;
+            const doneTypingInterval = 300; // tiempo en ms
+            
+            // Escuchar cuando el usuario escribe en el campo de búsqueda
+            searchInput.addEventListener('input', function() {
+                clearTimeout(typingTimer);
+                
+                const query = this.value.trim();
+                
+                if (query.length < 2) {
+                    resultsPreview.style.display = 'none';
+                    return;
+                }
+                
+                typingTimer = setTimeout(function() {
+                    fetchSearchResults(query);
+                }, doneTypingInterval);
+            });
+            
+            // Escuchar clics fuera del área de búsqueda para cerrar los resultados
+            document.addEventListener('click', function(e) {
+                if (!searchInput.contains(e.target) && !resultsPreview.contains(e.target)) {
+                    resultsPreview.style.display = 'none';
+                }
+            });
+            
+            // Obtener resultados de búsqueda vía AJAX
+            function fetchSearchResults(query) {
+                fetch(`/buscar/?q=${encodeURIComponent(query)}`, {
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    displaySearchResults(data, query);
+                })
+                .catch(error => console.error('Error:', error));
+            }
+            
+            // Mostrar resultados de búsqueda
+            function displaySearchResults(data, query) {
+                resultsPreview.innerHTML = '';
+                
+                // Resultados de recetas
+                if (data.recetas.length > 0) {
+                    const recetasCategory = document.createElement('div');
+                    recetasCategory.className = 'search-category';
+                    recetasCategory.textContent = 'Recetas';
+                    resultsPreview.appendChild(recetasCategory);
+                    
+                    data.recetas.forEach(receta => {
+                        const resultItem = document.createElement('a');
+                        resultItem.href = receta.url;
+                        resultItem.className = 'search-result-item';
+                        
+                        // Contenido del item (imagen + info)
+                        let imageHtml = '';
+                        if (receta.image_url) {
+                            imageHtml = `<img src="${receta.image_url}" alt="${receta.title}">`;
+                        } else {
+                            imageHtml = `<div class="icon-placeholder"><i class="fas fa-utensils"></i></div>`;
+                        }
+                        
+                        // Destacar la consulta en el título
+                        let highlightedTitle = receta.title;
+                        if (query) {
+                            const regex = new RegExp(`(${query})`, 'gi');
+                            highlightedTitle = receta.title.replace(regex, '<span class="result-highlight">$1</span>');
+                        }
+                        
+                        resultItem.innerHTML = `
+                            ${imageHtml}
+                            <div class="result-info">
+                                <div class="result-title">${highlightedTitle}</div>
+                                <div class="result-meta">por ${receta.author}</div>
+                            </div>
+                        `;
+                        
+                        resultsPreview.appendChild(resultItem);
+                    });
+                }
+                
+                // Resultados de usuarios
+                if (data.usuarios.length > 0) {
+                    const usuariosCategory = document.createElement('div');
+                    usuariosCategory.className = 'search-category';
+                    usuariosCategory.textContent = 'Usuarios';
+                    resultsPreview.appendChild(usuariosCategory);
+                    
+                    data.usuarios.forEach(usuario => {
+                        const resultItem = document.createElement('a');
+                        resultItem.href = usuario.url;
+                        resultItem.className = 'search-result-item';
+                        
+                        // Contenido del item (avatar + info)
+                        let imageHtml = '';
+                        if (usuario.image_url) {
+                            imageHtml = `<img src="${usuario.image_url}" alt="${usuario.username}">`;
+                        } else {
+                            imageHtml = `<div class="icon-placeholder"><i class="fas fa-user"></i></div>`;
+                        }
+                        
+                        // Destacar la consulta en el nombre de usuario
+                        let highlightedUsername = usuario.username;
+                        if (query) {
+                            const regex = new RegExp(`(${query})`, 'gi');
+                            highlightedUsername = usuario.username.replace(regex, '<span class="result-highlight">$1</span>');
+                        }
+                        
+                        resultItem.innerHTML = `
+                            ${imageHtml}
+                            <div class="result-info">
+                                <div class="result-title">${highlightedUsername}</div>
+                                <div class="result-meta">Ver perfil</div>
+                            </div>
+                        `;
+                        
+                        resultsPreview.appendChild(resultItem);
+                    });
+                }
+                
+                // Botón "Ver todos los resultados"
+                if (data.recetas.length > 0 || data.usuarios.length > 0) {
+                    const viewAllItem = document.createElement('div');
+                    viewAllItem.className = 'view-all';
+                    viewAllItem.textContent = 'Ver todos los resultados';
+                    viewAllItem.addEventListener('click', function() {
+                        searchForm.submit();
+                    });
+                    resultsPreview.appendChild(viewAllItem);
+                    
+                    // Mostrar el contenedor de resultados
+                    resultsPreview.style.display = 'block';
+                } else {
+                    // No hay resultados
+                    const noResults = document.createElement('div');
+                    noResults.className = 'search-result-item';
+                    noResults.innerHTML = '<div class="result-info"><div class="result-title">No se encontraron resultados</div></div>';
+                    resultsPreview.appendChild(noResults);
+                    resultsPreview.style.display = 'block';
+                }
+            }
+        });
+    </script>
+    
+    {% block extrajs %}{% endblock %}
+</body>
+</html>

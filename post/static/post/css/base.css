@@ -1,0 +1,235 @@
+html,
+body {
+    height: 100%;
+    margin: 0;
+}
+
+body {
+    display: flex;
+    font-family: Arial, sans-serif;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+header {
+    padding: 10px;
+    text-align: center;
+}
+
+#navbar {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px;
+    background-color: #303030;
+}
+
+#navbar ul {
+    display: flex;
+    list-style: none;
+    margin: auto;
+}
+
+#navbar ul li {
+    margin-right: 20px;
+}
+
+#navbar div {
+    display: flex;
+    align-items: center;
+}
+
+a {
+    text-decoration: none;
+    color: #ffffff;
+    font-size: 1.2em;
+}
+
+a:hover {
+    color: #922323;
+}
+
+.page_content {
+    padding: 20px;
+    flex: 1;
+    margin: 0 10vw;
+    border-left: 1px solid #303030;
+    border-right: 1px solid #303030;
+}
+
+footer {
+    text-align: center;
+    padding: 10px;
+    background-color: #303030;
+    color: #ffffff;
+}
+
+.perfil-container {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #303030;
+    border-radius: 5px;
+    background: #f9f9f9;
+}
+
+/* Estilos de truncamiento reforzados */
+.text-truncate {
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+    display: block !important;
+    max-width: 100% !important;
+}
+
+.text-truncate-2 {
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    max-height: 2.8em !important;
+    word-wrap: break-word !important;
+}
+
+.text-truncate-3 {
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 3 !important;
+    line-clamp: 3 !important;
+    -webkit-box-orient: vertical !important;
+    max-height: 4.2em !important;
+    word-wrap: break-word !important;
+}
+
+/* Aplicar a elementos específicos con más especificidad */
+.post-card .post-title {
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+    max-width: 100% !important;
+}
+
+.post-card .post-excerpt {
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 3 !important;
+    -webkit-box-orient: vertical !important;
+}
+
+.post-card .post-meta .post-author {
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+    max-width: 120px !important; /* Ajusta según sea necesario */
+}
+
+/* Para títulos de post en listas */
+h3.post-title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Para extractos de contenido */
+p.post-excerpt {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+}
+
+/* Para biografías de usuario */
+p.profile-bio {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    line-clamp: 4;
+    -webkit-box-orient: vertical;
+}
+
+/* Para cualquier otro elemento que necesite truncamiento */
+div.text-truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: block;
+}
+
+/* Para texto de varias líneas */
+div.text-truncate-3 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+}
+
+/* En plantillas que muestran listas de posts */
+.post-card {
+    border: 1px solid #303030;
+    border-radius: 5px;
+    margin: 10px 0;
+    background: #ffffff;
+    display: block;
+    overflow: hidden;
+    width: 100%;
+}
+
+.post-content {
+    padding: 15px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Título del post - una línea con elipsis */
+.post-title {
+    margin-bottom: 10px;
+    font-size: 1.25rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100%;
+}
+
+/* Contenido/extracto del post - múltiples líneas con elipsis */
+.post-excerpt {
+    margin-bottom: 15px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    max-height: 4.5em;
+}
+
+/* Autor del post - una línea con elipsis */
+.post-author {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 150px;
+}
+
+/* Estilos para posts detallados */
+.post-detail-content {
+    width: 100%;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+/* Estilo general para cualquier texto que necesite ser contenido */
+.text-contained {
+    max-width: 100%;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}

@@ -1,0 +1,121 @@
+{% extends 'post/base.html' %}
+{% load static %}
+
+{% block extra_head %} 
+<title>Editar Receta</title>
+<link rel="stylesheet" href="{% static 'post/css/formulario_blog.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <h2><i class="fas fa-edit"></i> Editar Receta</h2>
+    
+    {% if messages %}
+        <div class="messages-container">
+            {% for message in messages %}
+                <p><i class="fas fa-check-circle"></i> {{ message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+    
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label for="{{ form.title.id_for_label }}"><i class="fas fa-heading"></i> {{ form.title.label }}:</label>
+            {{ form.title.errors }}
+            {{ form.title }}
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form.ingredients.id_for_label }}"><i class="fas fa-list"></i> {{ form.ingredients.label }}:</label>
+            {{ form.ingredients.errors }}
+            {{ form.ingredients }}
+            <small class="text-muted">Escribe cada ingrediente en una línea separada, incluyendo cantidades.</small>
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form.instructions.id_for_label }}"><i class="fas fa-tasks"></i> {{ form.instructions.label }}:</label>
+            {{ form.instructions.errors }}
+            {{ form.instructions }}
+            <small class="text-muted">Describe paso a paso cómo preparar la receta.</small>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col">
+                <label for="{{ form.prep_time.id_for_label }}"><i class="fas fa-clock"></i> {{ form.prep_time.label }}:</label>
+                {{ form.prep_time.errors }}
+                {{ form.prep_time }}
+            </div>
+            
+            <div class="form-group col">
+                <label for="{{ form.cook_time.id_for_label }}"><i class="fas fa-fire"></i> {{ form.cook_time.label }}:</label>
+                {{ form.cook_time.errors }}
+                {{ form.cook_time }}
+            </div>
+            
+            <div class="form-group col">
+                <label for="{{ form.servings.id_for_label }}"><i class="fas fa-utensils"></i> {{ form.servings.label }}:</label>
+                {{ form.servings.errors }}
+                {{ form.servings }}
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col">
+                <label for="{{ form.difficulty.id_for_label }}"><i class="fas fa-signal"></i> {{ form.difficulty.label }}:</label>
+                {{ form.difficulty.errors }}
+                {{ form.difficulty }}
+            </div>
+            
+            <div class="form-group col">
+                <label for="{{ form.category.id_for_label }}"><i class="fas fa-tag"></i> {{ form.category.label }}:</label>
+                {{ form.category.errors }}
+                {{ form.category }}
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label for="{{ form.recipe_image.id_for_label }}"><i class="fas fa-image"></i> {{ form.recipe_image.label }}:</label>
+            {{ form.recipe_image.errors }}
+            <div class="custom-file-input">
+                {{ form.recipe_image }}
+                <label class="custom-file-label">
+                    {% if form.instance.recipe_image %}
+                        Imagen actual: {{ form.instance.recipe_image.name|slice:"12:" }}
+                    {% else %}
+                        Seleccionar imagen
+                    {% endif %}
+                </label>
+            </div>
+            {% if form.instance.recipe_image %}
+                <div class="current-image">
+                    <img src="{{ form.instance.recipe_image.url }}" alt="{{ form.instance.title }}" width="150">
+                    <label><input type="checkbox" name="delete_image"> Eliminar imagen</label>
+                </div>
+            {% endif %}
+            <small class="text-muted">Sube una imagen apetitosa de tu receta. Recomendado: formato horizontal.</small>
+        </div>
+
+        <div class="form-group checkbox-group">
+            {{ form.published }}
+            <label for="{{ form.published.id_for_label }}"><i class="fas fa-check-circle"></i> {{ form.published.label }}</label>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn-guardar"><i class="fas fa-save"></i> Guardar Cambios</button>
+            <a href="{% url 'recetas' %}" class="btn-cancelar"><i class="fas fa-times"></i> Cancelar</a>
+        </div>
+    </form>
+</div>
+
+<script>
+    // Script para mostrar el nombre del archivo seleccionado
+    document.querySelector('input[type="file"]').addEventListener('change', function(e) {
+        var fileName = e.target.files[0]?.name || 'Ningún archivo seleccionado';
+        var label = document.querySelector('.custom-file-label');
+        label.textContent = fileName;
+    });
+</script>
+{% endblock %}

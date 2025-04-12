@@ -1,0 +1,90 @@
+{% extends 'post/base.html' %}
+{% load static %}
+
+{% block extra_head %}
+<title>Eliminar Receta</title>
+<style>
+    .delete-container {
+        max-width: 600px;
+        margin: 40px auto;
+        padding: 30px;
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        text-align: center;
+    }
+    
+    .delete-container h2 {
+        color: #333;
+        margin-bottom: 20px;
+    }
+    
+    .delete-container p {
+        margin-bottom: 25px;
+        color: #666;
+        font-size: 1.1rem;
+    }
+    
+    .delete-container .recipe-title {
+        font-weight: bold;
+        color: #dc3545;
+    }
+    
+    .delete-actions {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+    }
+    
+    .btn-delete {
+        background-color: #dc3545;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 1rem;
+        transition: all 0.2s;
+    }
+    
+    .btn-delete:hover {
+        background-color: #c82333;
+    }
+    
+    .btn-cancel {
+        background-color: #6c757d;
+        color: white;
+        text-decoration: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        font-size: 1rem;
+        transition: all 0.2s;
+    }
+    
+    .btn-cancel:hover {
+        background-color: #5a6268;
+    }
+    
+    .warning-icon {
+        font-size: 3rem;
+        color: #dc3545;
+        margin-bottom: 20px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="delete-container">
+    <i class="fas fa-exclamation-triangle warning-icon"></i>
+    <h2>¿Estás seguro de querer eliminar esta receta?</h2>
+    <p>Estás a punto de eliminar la receta <span class="recipe-title">"{{ receta.title }}"</span>. Esta acción no se puede deshacer.</p>
+    
+    <form method="post">
+        {% csrf_token %}
+        <div class="delete-actions">
+            <a href="{% url 'recetas' %}" class="btn-cancel">Cancelar</a>
+            <button type="submit" class="btn-delete">Eliminar Definitivamente</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,75 @@
+{% extends 'post/base.html' %}
+{% load static %}
+
+{% block extra_head %} 
+<title>Repostear Receta</title>
+<link rel="stylesheet" href="{% static 'post/css/formulario_blog.css' %}">
+<style>
+    .recipe-preview {
+        background-color: #f8f9fa;
+        border-radius: 10px;
+        padding: 15px;
+        margin-bottom: 20px;
+        border: 1px solid #e9ecef;
+    }
+    
+    .recipe-preview h3 {
+        margin-top: 0;
+        font-size: 1.3rem;
+    }
+    
+    .recipe-preview .author {
+        font-size: 0.9rem;
+        color: #6c757d;
+        margin-bottom: 10px;
+    }
+    
+    .recipe-preview .author a {
+        color: #007bff;
+        text-decoration: none;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <h2>
+        {% if existing_repost %}
+            <i class="fas fa-retweet"></i> Editar Repost
+        {% else %}
+            <i class="fas fa-retweet"></i> Repostear Receta
+        {% endif %}
+    </h2>
+    
+    <div class="recipe-preview">
+        <h3>{{ recipe.title }}</h3>
+        <p class="author">Por: <a href="{% url 'perfil_publico' recipe.author.username %}">{{ recipe.author.username }}</a></p>
+        <div class="recipe-meta">
+            <span><i class="fas fa-clock"></i> Total: {{ recipe.total_time }} min</span>
+            <span><i class="fas fa-signal"></i> {{ recipe.get_difficulty_display }}</span>
+        </div>
+    </div>
+    
+    <form method="POST">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label for="{{ form.comment.id_for_label }}"><i class="fas fa-comment"></i> Tu comentario:</label>
+            {{ form.comment.errors }}
+            {{ form.comment }}
+            <small class="text-muted">Comparte tu opinión sobre esta receta.</small>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn-guardar">
+                {% if existing_repost %}
+                    <i class="fas fa-save"></i> Actualizar Repost
+                {% else %}
+                    <i class="fas fa-retweet"></i> Repostear
+                {% endif %}
+            </button>
+            <a href="{% url 'detalle_receta' recipe.id %}" class="btn-cancelar"><i class="fas fa-times"></i> Cancelar</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

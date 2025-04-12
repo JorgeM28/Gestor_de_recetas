@@ -1,0 +1,239 @@
+.recetas-container {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.recetas-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.recetas-header h1 {
+    font-size: 2rem;
+    color: #333;
+}
+
+.recetas-header h1 i {
+    color: #007bff;
+    margin-right: 10px;
+}
+
+.btn-nueva-receta {
+    background-color: #28a745;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-nueva-receta:hover {
+    background-color: #218838;
+    transform: translateY(-2px);
+}
+
+.messages-container {
+    margin-bottom: 20px;
+}
+
+.message {
+    padding: 12px 15px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    background-color: #d4edda;
+    color: #155724;
+    display: flex;
+    align-items: center;
+}
+
+.message i {
+    margin-right: 10px;
+}
+
+.grid-recetas {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 25px;
+}
+
+.tarjeta-receta {
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease;
+}
+
+.tarjeta-receta:hover {
+    transform: translateY(-5px);
+}
+
+.tarjeta-receta.no-publicada {
+    background-color: #f8f9fa;
+    border: 1px dashed #dee2e6;
+}
+
+.receta-img {
+    height: 180px; /* Altura fija para todas las miniaturas */
+    overflow: hidden;
+    position: relative;
+}
+
+.receta-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Esto es clave - mantiene proporciones recortando si es necesario */
+    transition: transform 0.5s ease;
+}
+
+.receta-img.no-image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #e9ecef;
+}
+
+.receta-img.no-image i {
+    font-size: 50px;
+    color: #adb5bd;
+}
+
+.tarjeta-receta:hover .receta-img img {
+    transform: scale(1.05);
+}
+
+.receta-content {
+    padding: 15px;
+}
+
+.receta-title {
+    font-size: 1.3rem;
+    margin-bottom: 12px;
+}
+
+.receta-title a {
+    color: #333;
+    text-decoration: none;
+}
+
+.receta-title a:hover {
+    color: #007bff;
+}
+
+.receta-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.receta-meta span {
+    font-size: 0.85rem;
+    color: #666;
+}
+
+.receta-meta span i {
+    color: #007bff;
+    margin-right: 5px;
+}
+
+.receta-fecha {
+    font-size: 0.85rem;
+    color: #666;
+    margin-bottom: 15px;
+}
+
+.receta-fecha i {
+    color: #007bff;
+    margin-right: 5px;
+}
+
+.borrador-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 20px;
+    background-color: #ffc107;
+    color: #212529;
+    font-size: 0.75rem;
+    margin-left: 8px;
+}
+
+.receta-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.btn-ver, .btn-editar, .btn-eliminar {
+    font-size: 0.85rem;
+    padding: 5px 10px;
+    border-radius: 4px;
+    color: white;
+    text-decoration: none;
+}
+
+.btn-ver {
+    background-color: #17a2b8;
+}
+
+.btn-editar {
+    background-color: #007bff;
+}
+
+.btn-eliminar {
+    background-color: #dc3545;
+}
+
+.btn-ver:hover, .btn-editar:hover, .btn-eliminar:hover {
+    opacity: 0.9;
+}
+
+.no-recetas {
+    text-align: center;
+    padding: 60px 20px;
+    color: #6c757d;
+}
+
+.no-recetas i {
+    font-size: 60px;
+    margin-bottom: 20px;
+    color: #dee2e6;
+}
+
+.no-recetas h3 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    color: #495057;
+}
+
+.no-recetas p {
+    margin-bottom: 25px;
+}
+
+.btn-primera-receta {
+    background-color: #28a745;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: 500;
+    display: inline-block;
+}
+
+.btn-primera-receta:hover {
+    background-color: #218838;
+}
+
+@media (max-width: 768px) {
+    .recetas-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+    
+    .grid-recetas {
+        grid-template-columns: 1fr;
+    }
+}
