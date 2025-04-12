@@ -1,5 +1,5 @@
 from django import forms
-from .models import Recipe, Comment, Profile, Repost, Suggestion
+from .models import Recipe, Comment, Profile, Repost, Suggestion, Rating
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
@@ -90,4 +90,12 @@ class SuggestionForm(forms.ModelForm):
                 'rows': 3,
                 'class': 'suggestion-input'
             }),
+        }
+
+class RatingForm(forms.ModelForm):
+    class Meta:
+        model = Rating
+        fields = ['value']
+        widgets = {
+            'value': forms.RadioSelect(attrs={'class': 'star-rating'})
         }

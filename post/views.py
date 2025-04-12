@@ -11,6 +11,8 @@ from .models import Suggestion, Notification
 from .forms import SuggestionForm
 from django.http import JsonResponse
 from django.urls import reverse
+from .models import Rating
+from .forms import RatingForm
 
 def index(request):
     recetas_recientes = Recipe.objects.filter(published=True).order_by('-created_at')[:6]  # Últimas 6 recetas
@@ -162,10 +164,17 @@ def eliminar_receta(request, recipe_id):
         return redirect('recetas')
     return render(request, 'post/borrar_receta.html', {'receta': receta})
 
+# Actualiza la función detalle_receta
+
 def detalle_receta(request, recipe_id):
     receta = get_object_or_404(Recipe, id=recipe_id)
     comentarios = receta.comments.all().order_by('-created_at')
     form = CommentForm()
+    
+    # Obtener la calificación del usuario si existe
+    user_rating = None
+    if request.user.is_authenticated:
+        user_rating = Rating.objects.filter(recipe=receta, user=request.user).first()
 
     if request.method == 'POST':
         form = CommentForm(request.POST)
@@ -193,7 +202,8 @@ def detalle_receta(request, recipe_id):
         'receta': receta,
         'comentarios': comentarios,
         'form': form,
-        'tiempo_total': tiempo_total
+        'tiempo_total': tiempo_total,
+        'user_rating': user_rating
     })
 
 def register(request):
@@ -212,11 +222,16 @@ from django.db.models import Q
 from django.urls import reverse
 from django.http import JsonResponse
 
+# Actualiza la función buscar
+
 def buscar(request):
     query = request.GET.get('q', '')
-    is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+    min_rating = request.GET.get('min_rating', '0')
+    difficulty = request.GET.get('difficulty', '')
+    categoria_id = request.GET.get('categoria', '')
     
-    if query:
+    # Para solicitudes AJAX (búsqueda instantánea) - mantener como está
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
         # Buscar recetas
         recetas = Recipe.objects.filter(
             Q(title__icontains=query) | 
@@ -226,12 +241,8 @@ def buscar(request):
         
         # Buscar usuarios
         usuarios = User.objects.filter(username__icontains=query)[:5]
-    else:
-        recetas = Recipe.objects.none()
-        usuarios = User.objects.none()
-    
-    # Si es una solicitud AJAX, devolver resultados en formato JSON
-    if is_ajax:
+        
+        # Código existente para AJAX - mantener igual
         recetas_data = [{
             'id': r.id,
             'title': r.title,
@@ -251,13 +262,55 @@ def buscar(request):
             'usuarios': usuarios_data
         })
     
-    # Si es una solicitud normal, renderizar plantilla completa
+    # Para la página completa de resultados
+    if query:
+        recetas = Recipe.objects.filter(
+            Q(title__icontains=query) | 
+            Q(ingredients__icontains=query) |
+            Q(category__name__icontains=query)
+        ).filter(published=True).distinct()
+        
+        usuarios = User.objects.filter(username__icontains=query)
+    else:
+        recetas = Recipe.objects.filter(published=True)
+        usuarios = User.objects.none()
+    
+    # Aplicar filtro por categoría
+    if categoria_id:
+        recetas = recetas.filter(category_id=categoria_id)
+    
+    # Aplicar filtro por dificultad
+    if difficulty:
+        recetas = recetas.filter(difficulty=difficulty)
+    
+    # Filtrar por calificación mínima
+    if min_rating and min_rating != '0':
+        min_rating_value = float(min_rating)
+        # Como el filtro de calificación es un cálculo, necesitamos filtrar después
+        filtered_recetas = []
+        for receta in recetas:
+            if receta.average_rating() >= min_rating_value:
+                filtered_recetas.append(receta.id)
+        
+        if filtered_recetas:
+            recetas = recetas.filter(id__in=filtered_recetas)
+        else:
+            recetas = Recipe.objects.none()
+    
+    # Obtener todas las categorías para los filtros
+    categorias = Category.objects.all()
+    
     return render(request, 'post/resultados_busqueda.html', {
         'query': query,
         'recetas': recetas,
         'usuarios': usuarios,
         'total_recetas': recetas.count(),
-        'total_usuarios': usuarios.count()
+        'total_usuarios': usuarios.count(),
+        'categorias': categorias,
+        'categoria_seleccionada': categoria_id,
+        'min_rating': min_rating,
+        'difficulty': difficulty,
+        'difficulty_choices': Recipe.DIFFICULTY_CHOICES,
     })
 
 @login_required
@@ -410,3 +463,35 @@ def mark_suggestion_read(request, suggestion_id):
             return JsonResponse({'status': 'error', 'message': 'Sugerencia no encontrada'})
     
     return JsonResponse({'status': 'error', 'message': 'Método no permitido'})
+
+@login_required
+def rate_recipe(request, recipe_id):
+    recipe = get_object_or_404(Recipe, id=recipe_id)
+    
+    if request.method == 'POST':
+        # Buscar si ya existe una calificación de este usuario
+        rating, created = Rating.objects.get_or_create(
+            recipe=recipe,
+            user=request.user,
+            defaults={'value': request.POST.get('value', 3)}
+        )
+        
+        if not created:
+            # Actualizar la calificación existente
+            rating.value = request.POST.get('value', rating.value)
+            rating.save()
+            
+        # Crear notificación para el autor de la receta
+        if request.user != recipe.author:
+            Notification.objects.create(
+                recipient=recipe.author,
+                sender=request.user,
+                notification_type='rating',
+                content=f"{request.user.username} ha calificado tu receta '{recipe.title}' con {rating.value} estrellas",
+                related_recipe=recipe
+            )
+        
+        messages.success(request, f'Has calificado esta receta con {rating.value} estrellas')
+        return redirect('detalle_receta', recipe_id=recipe.id)
+    
+    return redirect('detalle_receta', recipe_id=recipe.id)

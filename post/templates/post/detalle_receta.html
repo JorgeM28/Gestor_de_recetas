@@ -65,6 +65,44 @@
         </div>
     </div>
     
+    <div class="recipe-rating">
+        <h3><i class="fas fa-star"></i> Calificación</h3>
+        <div class="rating-stats">
+            <div class="average-rating">
+                <span class="rating-value">{{ receta.average_rating }}</span>
+                <div class="stars">
+                    {% for i in "12345" %}
+                        {% if forloop.counter <= receta.average_rating|floatformat:"0"|add:"0" %}
+                            <i class="fas fa-star"></i>
+                        {% elif forloop.counter == receta.average_rating|floatformat:"0"|add:"0"|add:"1" and receta.average_rating|floatformat:"1"|slice:"2:"|add:"0" >= 5 %}
+                            <i class="fas fa-star-half-alt"></i>
+                        {% else %}
+                            <i class="far fa-star"></i>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+            <span class="total-ratings">({{ receta.total_ratings }} calificaciones)</span>
+        </div>
+        
+        {% if user.is_authenticated and user != receta.author %}
+            <form method="post" action="{% url 'rate_recipe' receta.id %}" class="rating-form">
+                {% csrf_token %}
+                <div class="star-rating-container">
+                    <p>Tu calificación:</p>
+                    <div class="rating-options">
+                        {% for value in "12345" %}
+                            <input type="radio" name="value" id="star{{ value }}" value="{{ value }}" 
+                                   {% if user_rating.value == value|add:"0" %}checked{% endif %}>
+                            <label for="star{{ value }}"><i class="{% if user_rating.value >= value|add:"0" %}fas{% else %}far{% endif %} fa-star"></i></label>
+                        {% endfor %}
+                    </div>
+                </div>
+                <button type="submit" class="btn-calificar">Enviar calificación</button>
+            </form>
+        {% endif %}
+    </div>
+    
     {% if user.is_authenticated %}
         <div class="receta-actions">
             <a href="{% url 'recetas' %}" class="btn-volver"><i class="fas fa-arrow-left"></i> Volver a Recetas</a>
@@ -82,6 +120,46 @@
         <div class="receta-actions">
             <a href="{% url 'index' %}" class="btn-volver"><i class="fas fa-arrow-left"></i> Volver al Inicio</a>
         </div>
+    {% endif %}
+</div>
+
+<!-- Añadir después de las instrucciones y antes de la sección de comentarios -->
+
+<div class="recipe-rating">
+    <h3><i class="fas fa-star"></i> Calificación</h3>
+    <div class="rating-stats">
+        <div class="average-rating">
+            <span class="rating-value">{{ receta.average_rating }}</span>
+            <div class="stars">
+                {% for i in "12345" %}
+                    {% if forloop.counter <= receta.average_rating|floatformat:"0"|add:"0" %}
+                        <i class="fas fa-star"></i>
+                    {% elif forloop.counter == receta.average_rating|floatformat:"0"|add:"0"|add:"1" and receta.average_rating|floatformat:"1"|slice:"2:"|add:"0" >= 5 %}
+                        <i class="fas fa-star-half-alt"></i>
+                    {% else %}
+                        <i class="far fa-star"></i>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+        <span class="total-ratings">({{ receta.total_ratings }} calificaciones)</span>
+    </div>
+    
+    {% if user.is_authenticated and user != receta.author %}
+        <form method="post" action="{% url 'rate_recipe' receta.id %}" class="rating-form">
+            {% csrf_token %}
+            <div class="star-rating-container">
+                <p>Tu calificación:</p>
+                <div class="rating-options">
+                    {% for value in "12345" %}
+                        <input type="radio" name="value" id="star{{ value }}" value="{{ value }}" 
+                               {% if user_rating.value == value|add:"0" %}checked{% endif %}>
+                        <label for="star{{ value }}"><i class="{% if user_rating.value >= value|add:"0" %}fas{% else %}far{% endif %} fa-star"></i></label>
+                    {% endfor %}
+                </div>
+            </div>
+            <button type="submit" class="btn-calificar">Enviar calificación</button>
+        </form>
     {% endif %}
 </div>
 
@@ -124,4 +202,98 @@
     </div>
     {% endif %}
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const ratingForm = document.querySelector('.rating-form');
+        const ratingOptions = document.querySelectorAll('.rating-options input');
+        
+        if (ratingForm) {
+            // Cambiar estrellas al pasar el mouse
+            const ratingLabels = document.querySelectorAll('.rating-options label');
+            
+            ratingLabels.forEach((label, index) => {
+                label.addEventListener('mouseover', () => {
+                    // Cambiar todas las estrellas hasta la actual a llenas
+                    for (let i = 0; i <= index; i++) {
+                        ratingLabels[i].querySelector('i').className = 'fas fa-star';
+                    }
+                    // Cambiar el resto a vacías
+                    for (let i = index + 1; i < ratingLabels.length; i++) {
+                        ratingLabels[i].querySelector('i').className = 'far fa-star';
+                    }
+                });
+            });
+            
+            // Enviar automáticamente al seleccionar
+            ratingOptions.forEach(option => {
+                option.addEventListener('change', function() {
+                    ratingForm.submit();
+                });
+            });
+            
+            // Restaurar al estado original cuando se quita el mouse
+            const ratingContainer = document.querySelector('.rating-options');
+            ratingContainer.addEventListener('mouseleave', () => {
+                ratingOptions.forEach((option, index) => {
+                    const checkedIndex = Array.from(ratingOptions).findIndex(opt => opt.checked);
+                    
+                    if (checkedIndex >= 0) {
+                        // Si hay una opción seleccionada
+                        if (index <= checkedIndex) {
+                            ratingLabels[index].querySelector('i').className = 'fas fa-star';
+                        } else {
+                            ratingLabels[index].querySelector('i').className = 'far fa-star';
+                        }
+                    } else {
+                        // Si no hay ninguna seleccionada
+                        ratingLabels[index].querySelector('i').className = 'far fa-star';
+                    }
+                });
+            });
+        }
+    });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const ratingForm = document.querySelector('.rating-form');
+        if (ratingForm) {
+            const ratingOptions = document.querySelectorAll('.rating-options input');
+            
+            // Enviar automáticamente al seleccionar
+            ratingOptions.forEach(option => {
+                option.addEventListener('change', function() {
+                    ratingForm.submit();
+                });
+            });
+            
+            // Efecto visual al pasar el ratón
+            const stars = document.querySelectorAll('.rating-options label');
+            stars.forEach((star, index) => {
+                star.addEventListener('mouseover', function() {
+                    for (let i = 0; i <= index; i++) {
+                        stars[i].querySelector('i').className = 'fas fa-star';
+                    }
+                    for (let i = index + 1; i < stars.length; i++) {
+                        stars[i].querySelector('i').className = 'far fa-star';
+                    }
+                });
+            });
+            
+            // Restaurar estado al quitar el ratón
+            const container = document.querySelector('.rating-options');
+            container.addEventListener('mouseleave', function() {
+                const checkedIndex = Array.from(ratingOptions).findIndex(opt => opt.checked);
+                stars.forEach((star, index) => {
+                    if (checkedIndex >= 0 && index <= checkedIndex) {
+                        star.querySelector('i').className = 'fas fa-star';
+                    } else {
+                        star.querySelector('i').className = 'far fa-star';
+                    }
+                });
+            });
+        }
+    });
+</script>
 {% endblock %}

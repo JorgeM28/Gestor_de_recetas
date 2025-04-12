@@ -71,6 +71,15 @@ class Recipe(models.Model):
                     sys.getsizeof(output), None
                 )
 
+    def average_rating(self):
+        ratings = self.ratings.all()
+        if not ratings:
+            return 0
+        return round(sum(r.value for r in ratings) / len(ratings), 1)
+
+    def total_ratings(self):
+        return self.ratings.count()
+
 # Definir una señal para procesar la imagen antes de guardar
 @receiver(pre_save, sender=Recipe)
 def process_recipe_image(sender, instance, **kwargs):
@@ -137,12 +146,14 @@ class Suggestion(models.Model):
     def __str__(self):
         return f"Sugerencia de {self.user.username} ({self.created_at.strftime('%d/%m/%Y %H:%M')})"
 
-# Modelo para notificaciones
+# En el modelo Notification, actualiza TYPES
+
 class Notification(models.Model):
     TYPES = (
         ('repost', 'Repost'),
         ('suggestion', 'Nueva sugerencia'),
         ('comment', 'Nuevo comentario'),
+        ('rating', 'Nueva calificación'),
     )
     
     recipient = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notifications')
@@ -159,3 +170,18 @@ class Notification(models.Model):
         
     def __str__(self):
         return f"Notificación para {self.recipient.username}: {self.content}"
+
+# Modelo para calificaciones de recetas
+class Rating(models.Model):
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE, related_name="ratings", verbose_name='Receta')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Usuario')
+    value = models.PositiveSmallIntegerField(choices=[(1, '1'), (2, '2'), (3, '3'), (4, '4'), (5, '5')], verbose_name='Calificación')
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Fecha de calificación')
+    
+    class Meta:
+        unique_together = ('recipe', 'user')  # Un usuario solo puede calificar una vez
+        verbose_name = 'Calificación'
+        verbose_name_plural = 'Calificaciones'
+        
+    def __str__(self):
+        return f"{self.user.username} calificó {self.recipe.title} con {self.value} estrellas"
