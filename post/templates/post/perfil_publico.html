@@ -331,6 +331,35 @@
             </div>
         </div>
         {% endif %}
+
+        {% if user.favorites.exists %}
+        <div class="perfil-section">
+            <h2 class="section-title"><i class="fas fa-heart"></i> Recetas Favoritas</h2>
+            <div class="grid-recetas">
+                {% for favorite in user.favorites.all %}
+                    <div class="tarjeta-receta">
+                        {% if favorite.recipe.recipe_image %}
+                            <div class="receta-img">
+                                <img src="{{ favorite.recipe.recipe_image.url }}" alt="{{ favorite.recipe.title }}">
+                            </div>
+                        {% endif %}
+                        
+                        <div class="receta-content">
+                            <h3 class="receta-title">
+                                <a href="{% url 'post:detalle_receta' favorite.recipe.id %}">{{ favorite.recipe.title }}</a>
+                            </h3>
+                            
+                            <div class="receta-meta">
+                                <span><i class="fas fa-user"></i> {{ favorite.recipe.author.username }}</span>
+                                <span><i class="fas fa-clock"></i> {{ favorite.recipe.total_time }} min</span>
+                                <span><i class="fas fa-heart"></i> {{ favorite.recipe.favorited_by.count }}</span>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
         
         {% if categorias_usadas %}
             <div class="perfil-section">

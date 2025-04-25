@@ -18,6 +18,7 @@ urlpatterns = [
     path('receta/<int:recipe_id>/', views.detalle_receta, name='detalle_receta'),
     path('receta/<int:recipe_id>/repost/', views.repost_recipe, name='repost_recipe'),
     path('receta/<int:recipe_id>/calificar/', views.rate_recipe, name='rate_recipe'),
+    path('receta/<int:recipe_id>/favorito/', views.toggle_favorite, name='toggle_favorite'),
     path('register/', views.register, name='register'),
     path('usuario/<str:username>/', views.perfil_publico, name='perfil_publico'),
     path('sugerencia/enviar/', views.submit_suggestion, name='submit_suggestion'),
@@ -28,6 +29,7 @@ urlpatterns = [
     path('submit_suggestion/', views.submit_suggestion, name='submit_suggestion'),
     path('mark_suggestion_read/<int:suggestion_id>/', views.mark_suggestion_read, name='mark_suggestion_read'),
     path('suggestions/', views.suggestions_list, name='suggestions_list'),
+    path('mis-favoritos/', views.mis_favoritos, name='mis_favoritos'),
     path('login/', auth_views.LoginView.as_view(template_name='post/login.html'), name='login'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
 ]

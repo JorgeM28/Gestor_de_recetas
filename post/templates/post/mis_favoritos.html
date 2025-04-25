@@ -1,0 +1,108 @@
+{% extends 'post/base.html' %}
+{% load static %}
+
+{% block extra_head %} 
+<title>Mis Favoritos</title>
+<link rel="stylesheet" href="{% static 'post/css/recetas.css' %}">
+<link rel="stylesheet" href="{% static 'post/css/categorias.css' %}">
+{% endblock extra_head%}
+
+{% block content %}
+<div class="recetas-container">
+    <div class="recetas-header">
+        <h1><i class="fas fa-heart"></i> Mis Favoritos</h1>
+    </div>
+
+    {% if favoritos %}
+        <div class="grid-recetas">
+            {% for favorito in favoritos %}
+                <div class="tarjeta-receta">
+                    {% if favorito.recipe.recipe_image %}
+                        <div class="receta-img">
+                            <img src="{{ favorito.recipe.recipe_image.url }}" alt="{{ favorito.recipe.title }}">
+                        </div>
+                    {% else %}
+                        <div class="receta-img no-image">
+                            <i class="fas fa-utensils"></i>
+                        </div>
+                    {% endif %}
+                    
+                    <div class="receta-content">
+                        <h2 class="receta-title">
+                            <a href="{% url 'post:detalle_receta' favorito.recipe.id %}">{{ favorito.recipe.title }}</a>
+                        </h2>
+                        
+                        <div class="receta-meta">
+                            <span><i class="fas fa-user"></i> {{ favorito.recipe.author.username }}</span>
+                            <span><i class="fas fa-clock"></i> {{ favorito.recipe.total_time }} min</span>
+                            <span><i class="fas fa-signal"></i> {{ favorito.recipe.get_difficulty_display }}</span>
+                            {% if favorito.recipe.category %}
+                                <span><i class="fas fa-tag"></i> {{ favorito.recipe.category.name }}</span>
+                            {% endif %}
+                        </div>
+                        
+                        <p class="receta-fecha">
+                            <i class="fas fa-calendar-alt"></i> Añadido el {{ favorito.created_at|date:"d M Y" }}
+                        </p>
+                        
+                        <div class="receta-actions">
+                            <a href="{% url 'post:detalle_receta' favorito.recipe.id %}" class="btn-ver">
+                                <i class="fas fa-eye"></i> Ver
+                            </a>
+                            <button class="btn-eliminar btn-remove-favorite" data-recipe-id="{{ favorito.recipe.id }}">
+                                <i class="fas fa-trash"></i> Quitar favorito
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="no-recetas">
+            <i class="far fa-heart"></i>
+            <h3>No tienes favoritos aún</h3>
+            <p>Explora recetas y marca tus favoritas haciendo clic en el botón de corazón.</p>
+            <a href="{% url 'post:categorias' %}" class="btn-primera-receta">
+                <i class="fas fa-search"></i> Explorar Recetas
+            </a>
+        </div>
+    {% endif %}
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const removeFavoriteButtons = document.querySelectorAll('.btn-remove-favorite');
+    removeFavoriteButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const recipeId = this.dataset.recipeId;
+            const cardElement = this.closest('.tarjeta-receta');
+            
+            fetch(`/receta/${recipeId}/favorito/`, {
+                method: 'POST',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (!data.is_favorite) {
+                    // Animación de eliminación
+                    cardElement.style.opacity = '0';
+                    setTimeout(() => {
+                        cardElement.style.display = 'none';
+                        
+                        // Verificar si no quedan favoritos
+                        const remainingCards = document.querySelectorAll('.tarjeta-receta');
+                        if (remainingCards.length <= 1) {
+                            location.reload();  // Recargar para mostrar el mensaje de "no favoritos"
+                        }
+                    }, 300);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    });
+});
+</script>
+{% endblock content %}

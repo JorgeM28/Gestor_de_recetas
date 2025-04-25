@@ -13,6 +13,7 @@ from django.http import JsonResponse
 from django.urls import reverse
 from .models import Rating
 from .forms import RatingForm
+from .models import Favorite  # Añade esto a tus importaciones existentes
 
 def index(request):
     recetas_recientes = Recipe.objects.filter(published=True).order_by('-created_at')[:6]  # Últimas 6 recetas
@@ -76,26 +77,18 @@ def perfil(request):
 
 def perfil_publico(request, username):
     user = get_object_or_404(User, username=username)
-    
-    # Recetas creadas por el usuario
     recetas_propias = Recipe.objects.filter(author=user, published=True).order_by('-created_at')
-    
-    # Recetas reposteadas por el usuario
     reposts = Repost.objects.filter(reposted_by=user).order_by('-created_at')
-    
-    # Obtener estadísticas del usuario
-    total_recetas_propias = recetas_propias.count()
-    total_reposts = reposts.count()
-    categorias_usadas = Category.objects.filter(recipe__author=user, recipe__published=True).distinct()
+    favoritos = Favorite.objects.filter(user=user).order_by('-created_at')
     
     context = {
         'profile_user': user,
         'recetas_propias': recetas_propias,
         'reposts': reposts,
-        'total_recetas_propias': total_recetas_propias,
-        'total_reposts': total_reposts,
-        'total_recetas': total_recetas_propias + total_reposts,
-        'categorias_usadas': categorias_usadas,
+        'favoritos': favoritos,
+        'total_recetas_propias': recetas_propias.count(),
+        'total_reposts': reposts.count(),
+        'total_favoritos': favoritos.count(),
     }
     
     return render(request, 'post/perfil_publico.html', context)
@@ -171,6 +164,11 @@ def detalle_receta(request, recipe_id):
     comentarios = receta.comments.all().order_by('-created_at')
     form = CommentForm()
     
+    # Verificar si es favorito para el usuario actual
+    is_favorite = False
+    if request.user.is_authenticated:
+        is_favorite = Favorite.objects.filter(user=request.user, recipe=receta).exists()
+    
     # Obtener la calificación del usuario si existe
     user_rating = None
     if request.user.is_authenticated:
@@ -203,7 +201,8 @@ def detalle_receta(request, recipe_id):
         'comentarios': comentarios,
         'form': form,
         'tiempo_total': tiempo_total,
-        'user_rating': user_rating
+        'user_rating': user_rating,
+        'is_favorite': is_favorite
     })
 
 def register(request):
@@ -499,3 +498,42 @@ def rate_recipe(request, recipe_id):
         return redirect('post:detalle_receta', recipe_id=recipe.id)
     
     return redirect('post:detalle_receta', recipe_id=recipe.id)
+
+@login_required
+def toggle_favorite(request, recipe_id):
+    recipe = get_object_or_404(Recipe, id=recipe_id)
+    favorite, created = Favorite.objects.get_or_create(user=request.user, recipe=recipe)
+    
+    if not created:
+        # Si ya existía, lo eliminamos
+        favorite.delete()
+        messages.success(request, 'Receta eliminada de favoritos')
+    else:
+        # Si es nuevo, notificamos al autor
+        if request.user != recipe.author:
+            Notification.objects.create(
+                recipient=recipe.author,
+                sender=request.user,
+                notification_type='favorite',
+                content=f"{request.user.username} ha añadido tu receta '{recipe.title}' a favoritos",
+                related_recipe=recipe
+            )
+        messages.success(request, 'Receta añadida a favoritos')
+    
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        return JsonResponse({
+            'is_favorite': created,
+            'total_favorites': recipe.favorited_by.count()
+        })
+    
+    return redirect('post:detalle_receta', recipe_id=recipe.id)
+
+@login_required
+def mis_favoritos(request):
+    # Obtener los favoritos del usuario actual
+    favoritos = Favorite.objects.filter(user=request.user).select_related('recipe', 'recipe__author')
+    
+    return render(request, 'post/mis_favoritos.html', {
+        'favoritos': favoritos,
+        'total_favoritos': favoritos.count(),
+    })

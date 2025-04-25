@@ -356,7 +356,7 @@
         }
 
         .notifications-icon {
-            background-color: #007bff;
+            background-color: #43A047 !important;
             color: white;
             padding: 10px;
             border-radius: 50%;
@@ -396,7 +396,7 @@
         }
 
         .notifications-header {
-            background-color: #007bff;
+            background-color: #43A047 !important;
             color: white;
             padding: 10px;
             border-radius: 10px 10px 0 0;
@@ -750,7 +750,7 @@
                 {% if user.is_authenticated %}
                     <li><a href="{% url 'post:categorias' %}"><i class="fas fa-th-large"></i> Categorías</a></li>
                     <li><a href="{% url 'post:recetas' %}"><i class="fas fa-utensils"></i> Mis Recetas</a></li>
-                    
+                    <li><a href="{% url 'post:mis_favoritos' %}"><i class="fas fa-heart"></i> Mis Favoritos</a></li>
                 {% endif %}
 
                 {% if user.is_staff or user.is_superuser %}

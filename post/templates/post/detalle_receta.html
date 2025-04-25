@@ -4,11 +4,45 @@
 {% block extra_head %} 
 <title>{{ receta.title }}</title>
 <link rel="stylesheet" href="{% static 'post/css/detalle_receta.css' %}">
+<style>
+/* Estilos para el botón de favoritos */
+.favorite-container {
+    display: inline-block;
+    margin-left: 10px;
+}
+
+.favorite-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.5rem;
+    transition: all 0.3s ease;
+    color: #ccc;
+}
+
+.favorite-button:hover {
+    transform: scale(1.2);
+    color: #ff6b6b;
+}
+
+.favorite-button.favorited {
+    color: #ff6b6b;
+}
+</style>
 {% endblock extra_head%}
 
 {% block content %}
 <div class="detalle-receta">
     <h1 class="receta-title">{{ receta.title }}</h1>
+    
+    <div class="favorite-container">
+        <button 
+            class="favorite-button {% if is_favorite %}favorited{% endif %}" 
+            data-recipe-id="{{ receta.id }}" 
+            title="{% if is_favorite %}Quitar de favoritos{% else %}Añadir a favoritos{% endif %}">
+            <i class="fas fa-heart"></i>
+        </button>
+    </div>
     
     <div class="receta-meta">
         <div class="receta-author">
@@ -296,5 +330,36 @@
             });
         }
     });
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const favoriteButtons = document.querySelectorAll('.favorite-button');
+    
+    favoriteButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const recipeId = this.dataset.recipeId;
+            
+            fetch(`/receta/${recipeId}/favorito/`, {
+                method: 'POST',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.is_favorite) {
+                    this.classList.add('favorited');
+                    this.title = 'Quitar de favoritos';
+                } else {
+                    this.classList.remove('favorited');
+                    this.title = 'Añadir a favoritos';
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    });
+});
 </script>
 {% endblock %}

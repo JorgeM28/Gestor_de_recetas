@@ -314,7 +314,7 @@
 
 .btn-login {
     display: inline-block;
-    background-color: #007bff;
+    background-color: #2E7D32;
     color: white;
     padding: 8px 15px;
     border-radius: 5px;
@@ -472,4 +472,38 @@
 
 .btn-clear-filters:hover {
     text-decoration: underline;
+}
+
+.btn-favorite {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: var(--radius);
+    background-color: var(--color-surface);
+    color: var(--color-text);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-favorite.active {
+    color: #e74c3c;
+}
+
+.btn-favorite i {
+    transition: transform 0.3s ease;
+}
+
+.btn-favorite:hover i {
+    transform: scale(1.2);
+}
+
+.btn-favorite.active i {
+    color: #e74c3c;
+}
+
+.favorite-count {
+    font-size: 0.9rem;
+    color: var(--color-text-light);
 }
