@@ -206,14 +206,14 @@
 
 .comentarios-section h3 {
     font-size: 1.5rem;
-    color: #333;
+    color: #2E7D32;
     margin-bottom: 20px;
     padding-bottom: 10px;
     border-bottom: 2px solid #f0f0f0;
 }
 
 .comentarios-section h3 i {
-    color: #007bff;
+    color: #2E7D32;
     margin-right: 8px;
 }
 
@@ -272,7 +272,7 @@
 }
 
 .nuevo-comentario h4 i {
-    color: #007bff;
+    color: #2E7D32;
     margin-right: 8px;
 }
 
