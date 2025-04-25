@@ -1,343 +1,97 @@
 {% extends 'post/base.html' %}
 {% load static %}
 
-{% block extra_head %} 
-<title>Resultados de búsqueda: {{ query }}</title>
-<style>
-    .search-results-container {
-        max-width: 1000px;
-        margin: 0 auto;
-    }
-    
-    .search-header {
-        text-align: center;
-        margin-bottom: 30px;
-    }
-    
-    .search-header h1 {
-        font-size: 1.8rem;
-        color: #333;
-        margin-bottom: 10px;
-    }
-    
-    .search-header .search-query {
-        background-color: #f8f9fa;
-        padding: 3px 8px;
-        border-radius: 4px;
-    }
-    
-    .search-section {
-        background-color: white;
-        border-radius: 10px;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        padding: 20px;
-        margin-bottom: 30px;
-    }
-    
-    .section-title {
-        font-size: 1.3rem;
-        margin-bottom: 20px;
-        padding-bottom: 10px;
-        border-bottom: 1px solid #eee;
-        display: flex;
-        align-items: center;
-    }
-    
-    .section-title i {
-        margin-right: 10px;
-        color: #007bff;
-    }
-    
-    .grid-recetas {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-        gap: 20px;
-    }
-    
-    .tarjeta-receta {
-        background-color: #f8f9fa;
-        border-radius: 8px;
-        overflow: hidden;
-        transition: transform 0.3s ease;
-    }
-    
-    .tarjeta-receta:hover {
-        transform: translateY(-5px);
-    }
-    
-    .receta-img {
-        height: 160px;
-        overflow: hidden;
-    }
-    
-    .receta-img img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-    
-    .receta-content {
-        padding: 15px;
-    }
-    
-    .receta-title {
-        font-size: 1.1rem;
-        margin-bottom: 8px;
-    }
-    
-    .receta-title a {
-        color: #333;
-        text-decoration: none;
-    }
-    
-    .receta-meta {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 15px;
-        font-size: 0.85rem;
-        color: #666;
-    }
-    
-    .receta-meta i {
-        color: #007bff;
-        margin-right: 5px;
-    }
-    
-    .usuarios-lista {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-        gap: 15px;
-    }
-    
-    .usuario-card {
-        background-color: #f8f9fa;
-        border-radius: 8px;
-        padding: 15px;
-        display: flex;
-        align-items: center;
-        transition: transform 0.3s ease;
-    }
-    
-    .usuario-card:hover {
-        transform: translateY(-3px);
-    }
-    
-    .usuario-avatar {
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        background-color: #e9ecef;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-right: 15px;
-    }
-    
-    .usuario-avatar img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        border-radius: 50%;
-    }
-    
-    .usuario-avatar i {
-        font-size: 24px;
-        color: #adb5bd;
-    }
-    
-    .usuario-info {
-        flex-grow: 1;
-    }
-    
-    .usuario-nombre {
-        font-weight: 500;
-        margin-bottom: 5px;
-    }
-    
-    .usuario-nombre a {
-        color: #333;
-        text-decoration: none;
-    }
-    
-    .usuario-meta {
-        font-size: 0.8rem;
-        color: #6c757d;
-    }
-    
-    .no-results {
-        text-align: center;
-        padding: 30px;
-    }
-    
-    .no-results i {
-        font-size: 40px;
-        color: #dee2e6;
-        margin-bottom: 15px;
-    }
-    
-    .highlight {
-        background-color: #fff3cd;
-        padding: 0 2px;
-    }
-
-    .search-filters {
-        margin-bottom: 20px;
-    }
-
-    .search-filters h3 {
-        font-size: 1.2rem;
-        margin-bottom: 10px;
-    }
-
-    .filter-group {
-        margin-bottom: 15px;
-    }
-
-    .filter-group label {
-        display: block;
-        margin-bottom: 5px;
-        font-weight: 500;
-    }
-
-    .filter-select {
-        width: 100%;
-        padding: 8px;
-        border: 1px solid #ced4da;
-        border-radius: 4px;
-    }
-</style>
+{% block extra_head %}
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'post/css/search.css' %}">
 {% endblock %}
 
 {% block content %}
 <div class="search-results-container">
     <div class="search-header">
-        <h1>Resultados de búsqueda para <span class="search-query">"{{ query }}"</span></h1>
-        <p>Se encontraron {{ total_recetas }} recetas y {{ total_usuarios }} usuarios</p>
+        <h1>Resultados para <span class="search-query">{{ query }}</span></h1>
+        <p>{{ total_recetas }} recetas y {{ total_usuarios }} usuarios encontrados</p>
     </div>
 
-    <div class="search-filters">
-        <h3><i class="fas fa-filter"></i> Filtros</h3>
-        <form method="GET" action="{% url 'buscar' %}" id="filter-form">
-            <input type="hidden" name="q" value="{{ query }}">
-            
-            <div class="filter-row">
-                <div class="filter-group">
-                    <label><i class="fas fa-tag"></i> Categoría:</label>
-                    <select name="categoria" class="filter-select" onchange="document.getElementById('filter-form').submit()">
-                        <option value="">Todas las categorías</option>
-                        {% for categoria in categorias %}
-                            <option value="{{ categoria.id }}" {% if categoria.id|stringformat:'s' == categoria_seleccionada %}selected{% endif %}>
-                                {{ categoria.name }}
-                            </option>
-                        {% endfor %}
-                    </select>
-                </div>
+    {% if recetas or usuarios %}
+        <div class="search-filters">
+            <h3><i class="fas fa-filter"></i> Filtrar resultados</h3>
+            <form method="GET" action="{% url 'buscar' %}" id="filter-form">
+                <input type="hidden" name="q" value="{{ query }}">
                 
-                <div class="filter-group">
-                    <label><i class="fas fa-signal"></i> Dificultad:</label>
-                    <select name="difficulty" class="filter-select" onchange="document.getElementById('filter-form').submit()">
-                        <option value="">Cualquier dificultad</option>
-                        {% for value, label in difficulty_choices %}
-                            <option value="{{ value }}" {% if difficulty == value %}selected{% endif %}>{{ label }}</option>
-                        {% endfor %}
-                    </select>
+                <div class="filter-row">
+                    <div class="filter-group">
+                        <label><i class="fas fa-tag"></i> Categoría</label>
+                        <select name="categoria" class="filter-select">
+                            <option value="">Todas las categorías</option>
+                            {% for categoria in categorias %}
+                                <option value="{{ categoria.id }}" {% if categoria.id|stringformat:'s' == categoria_seleccionada %}selected{% endif %}>
+                                    {{ categoria.name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label><i class="fas fa-signal"></i> Dificultad</label>
+                        <select name="difficulty" class="filter-select">
+                            <option value="">Cualquier dificultad</option>
+                            {% for value, label in difficulty_choices %}
+                                <option value="{{ value }}" {% if difficulty == value %}selected{% endif %}>
+                                    {{ label }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label><i class="fas fa-star"></i> Calificación mínima</label>
+                        <select name="min_rating" class="filter-select">
+                            <option value="0">Cualquier calificación</option>
+                            {% for i in "12345" %}
+                                <option value="{{ i }}" {% if min_rating == i %}selected{% endif %}>
+                                    {{ i }} {% if i == "1" %}estrella{% else %}estrellas{% endif %} o más
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
                 </div>
-                
-                <div class="filter-group">
-                    <label><i class="fas fa-star"></i> Calificación mínima:</label>
-                    <select name="min_rating" class="filter-select" onchange="document.getElementById('filter-form').submit()">
-                        <option value="0" {% if min_rating == '0' %}selected{% endif %}>Cualquiera</option>
-                        <option value="1" {% if min_rating == '1' %}selected{% endif %}>★ o más</option>
-                        <option value="2" {% if min_rating == '2' %}selected{% endif %}>★★ o más</option>
-                        <option value="3" {% if min_rating == '3' %}selected{% endif %}>★★★ o más</option>
-                        <option value="4" {% if min_rating == '4' %}selected{% endif %}>★★★★ o más</option>
-                        <option value="5" {% if min_rating == '5' %}selected{% endif %}>★★★★★</option>
-                    </select>
-                </div>
+            </form>
+        </div>
+
+        {% if recetas %}
+        <div class="search-section">
+            <h2 class="section-title"><i class="fas fa-utensils"></i> Recetas</h2>
+            <div class="grid-recetas">
+                {% include "post/includes/recetas_grid.html" with recetas=recetas %}
             </div>
-            
-            {% if categoria_seleccionada or difficulty or min_rating != '0' %}
-                <div class="filter-actions">
-                    <a href="{% url 'buscar' %}?q={{ query }}" class="btn-clear-filters">
-                        <i class="fas fa-times"></i> Limpiar filtros
-                    </a>
-                </div>
-            {% endif %}
-        </form>
-    </div>
-    
-    {% if recetas %}
-    <div class="search-section">
-        <h2 class="section-title"><i class="fas fa-utensils"></i> Recetas</h2>
-        <div class="grid-recetas">
-            {% for receta in recetas %}
-                <div class="tarjeta-receta">
-                    {% if receta.recipe_image %}
-                        <div class="receta-img">
-                            <img src="{{ receta.recipe_image.url }}" alt="{{ receta.title }}">
-                        </div>
-                    {% else %}
-                        <div class="receta-img" style="display:flex;align-items:center;justify-content:center;background:#f8f9fa;">
-                            <i class="fas fa-utensils" style="font-size:40px;color:#dee2e6;"></i>
-                        </div>
-                    {% endif %}
-                    
-                    <div class="receta-content">
-                        <h3 class="receta-title">
-                            <a href="{% url 'detalle_receta' receta.id %}">{{ receta.title }}</a>
-                        </h3>
-                        
-                        <div class="receta-meta">
-                            <span><i class="fas fa-user"></i> {{ receta.author.username }}</span>
-                            <span><i class="fas fa-signal"></i> {{ receta.get_difficulty_display }}</span>
-                            {% if receta.category %}
-                                <span><i class="fas fa-tag"></i> {{ receta.category.name }}</span>
-                            {% endif %}
-                            <span class="receta-rating">
-                                <i class="fas fa-star"></i> {{ receta.average_rating|floatformat:1 }}
-                                <small>({{ receta.total_ratings }})</small>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            {% endfor %}
         </div>
-    </div>
-    {% endif %}
-    
-    {% if usuarios %}
-    <div class="search-section">
-        <h2 class="section-title"><i class="fas fa-users"></i> Usuarios</h2>
-        <div class="usuarios-lista">
-            {% for usuario in usuarios %}
-                <div class="usuario-card">
-                    <div class="usuario-avatar">
-                        {% if usuario.profile.profile_image %}
-                            <img src="{{ usuario.profile.profile_image.url }}" alt="{{ usuario.username }}">
-                        {% else %}
-                            <i class="fas fa-user"></i>
-                        {% endif %}
-                    </div>
-                    <div class="usuario-info">
-                        <h3 class="usuario-nombre">
-                            <a href="{% url 'perfil_publico' usuario.username %}">{{ usuario.username }}</a>
-                        </h3>
-                        <div class="usuario-meta">
-                            <span>{{ usuario.recipe_set.filter.count }} recetas</span>
-                        </div>
-                    </div>
-                </div>
-            {% endfor %}
+        {% endif %}
+
+        {% if usuarios %}
+        <div class="search-section">
+            <h2 class="section-title"><i class="fas fa-users"></i> Usuarios</h2>
+            <div class="usuarios-lista">
+                {% for usuario in usuarios %}
+                    {% include "post/includes/usuario_card.html" with usuario=usuario %}
+                {% endfor %}
+            </div>
         </div>
-    </div>
-    {% endif %}
-    
-    {% if not recetas and not usuarios %}
-        <div class="search-section no-results">
+        {% endif %}
+    {% else %}
+        <div class="no-results">
             <i class="fas fa-search"></i>
             <h3>No se encontraron resultados</h3>
-            <p>Intenta buscar con otros términos o revisa la ortografía.</p>
+            <p>Intenta con otros términos de búsqueda o ajusta los filtros</p>
         </div>
     {% endif %}
 </div>
+
+<script>
+document.querySelectorAll('.filter-select').forEach(select => {
+    select.addEventListener('change', () => {
+        document.getElementById('filter-form').submit();
+    });
+});
+</script>
 {% endblock %}
