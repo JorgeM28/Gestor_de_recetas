@@ -1,3 +1,16 @@
+/* Variables de color actualizadas */
+:root {
+  --color-primary: #ff6b6b;
+  --color-secondary: #4ecdc4;
+  --color-accent: #ffe66d;
+  --color-background: #f7f7f7;
+  --color-text: #2d3436;
+  --color-text-light: #636e72;
+  --color-white: #ffffff;
+  --color-gray-light: #f0f0f0;
+  --color-shadow: rgba(0, 0, 0, 0.1);
+}
+
 .grid-publicaciones {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Ajusta columnas dinámicamente */
@@ -54,79 +67,150 @@
 
 /* Estilos para la página de inicio */
 
+/* Grid de recetas mejorado */
 .grid-recetas {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 25px;
-    margin: 30px 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
+/* Media queries para diferentes tamaños de pantalla */
+@media screen and (min-width: 768px) {
+  .grid-recetas {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .grid-recetas {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media screen and (min-width: 1400px) {
+  .grid-recetas {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Tarjeta de receta */
 .tarjeta-receta {
-    background-color: white;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
-    transition: transform 0.3s ease;
+  background-color: var(--color-white);
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px var(--color-shadow);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  animation: fadeIn 0.5s ease forwards;
 }
 
 .tarjeta-receta:hover {
-    transform: translateY(-5px);
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
 
-/* Control de imágenes - parte clave */
+/* Imagen de la receta */
 .receta-img {
-    height: 200px; /* Altura fija para todas las imágenes */
-    overflow: hidden;
-    position: relative;
+  position: relative;
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
 }
 
 .receta-img img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover; /* Mantiene proporciones recortando si es necesario */
-    transition: transform 0.3s ease;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
 }
 
 .tarjeta-receta:hover .receta-img img {
-    transform: scale(1.05);
+  transform: scale(1.1);
+}
+
+/* Contenido de la receta */
+.receta-content {
+  padding: 1.5rem;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(to bottom, var(--color-white), var(--color-gray-light));
 }
 
 .receta-title {
-    font-size: 1.3rem;
-    margin: 15px 15px 10px;
+  font-size: 1.25rem;
+  color: var(--color-text);
+  margin-bottom: 1rem;
+  font-weight: 600;
 }
 
 .receta-title a {
-    color: #333;
-    text-decoration: none;
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.3s ease;
 }
 
 .receta-title a:hover {
-    color: #007bff;
+  color: var(--color-primary);
 }
 
+/* Meta información */
 .receta-meta {
-    padding: 0 15px 15px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  color: var(--color-text-light);
 }
 
 .receta-meta span {
-    font-size: 0.85rem;
-    color: #666;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
-.receta-meta span i {
-    color: #007bff;
-    margin-right: 5px;
+.receta-meta i {
+  color: var(--color-primary);
 }
 
+/* Autor y fecha */
 .receta-author {
-    padding: 10px 15px;
-    border-top: 1px solid #eee;
-    font-size: 0.85rem;
-    color: #666;
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-gray-light);
+  font-size: 0.9rem;
+  color: var(--color-text-light);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .grid-recetas {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 20px;
+        padding: 15px;
+    }
+    
+    .receta-img {
+        height: 180px;
+    }
+    
+    .receta-content {
+        padding: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .grid-recetas {
+        grid-template-columns: 1fr;
+        gap: 15px;
+        padding: 10px;
+    }
 }
 
 .action-button {
@@ -152,8 +236,35 @@
     transform: translateY(-2px);
 }
 
-@media (max-width: 768px) {
-    .grid-recetas {
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    }
+/* Botones */
+.btn-accion {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.btn-ver {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+}
+
+.btn-ver:hover {
+  background-color: darken(var(--color-primary), 10%);
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

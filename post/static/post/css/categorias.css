@@ -37,3 +37,234 @@ select {
     padding: 5px;
     font-size: 1em;
 }
+
+/* Variables de color y fuentes */
+:root {
+  --color-primary: #6b48ff;
+  --color-secondary: #ff6b6b;
+  --color-accent: #4ecdc4;
+  --color-background: #f0f2f5;
+  --color-card: #ffffff;
+  --color-text: #2d3436;
+  --color-text-light: #636e72;
+  --gradient-primary: linear-gradient(135deg, #6b48ff 0%, #8466ff 100%);
+  --font-primary: 'Poppins', sans-serif;
+  --font-secondary: 'Playfair Display', serif;
+}
+
+/* Estilos base */
+body {
+  background-color: var(--color-background);
+  font-family: var(--font-primary);
+}
+
+/* Contenedor principal */
+.categorias-container {
+  max-width: 1400px;
+  margin: 2rem auto;
+  padding: 0 1.5rem;
+}
+
+/* Encabezado de categorías */
+.categorias-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  padding: 2rem;
+  background: var(--gradient-primary);
+  border-radius: 1rem;
+  color: white;
+  box-shadow: 0 4px 15px rgba(107, 72, 255, 0.2);
+}
+
+.categorias-header h1 {
+  font-family: var(--font-secondary);
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.categorias-header p {
+  font-size: 1.1rem;
+  opacity: 0.9;
+}
+
+/* Filtro de categorías */
+.categorias-filtro {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  margin-bottom: 3rem;
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  border-radius: 1rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  position: sticky;
+  top: 1rem;
+  z-index: 10;
+}
+
+.btn-categoria {
+  padding: 0.75rem 1.5rem;
+  border-radius: 2rem;
+  background-color: white;
+  color: var(--color-text);
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.btn-categoria:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.btn-categoria.active {
+  background: var(--gradient-primary);
+  color: white;
+  border-color: transparent;
+}
+
+/* Grid de recetas */
+.grid-recetas {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+  padding: 1rem;
+}
+
+/* Tarjetas de recetas */
+.tarjeta-receta {
+  background: var(--color-card);
+  border-radius: 1rem;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.tarjeta-receta:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.receta-img {
+  height: 220px;
+  overflow: hidden;
+}
+
+.receta-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+}
+
+.tarjeta-receta:hover .receta-img img {
+  transform: scale(1.08);
+}
+
+.receta-content {
+  padding: 1.5rem;
+}
+
+.receta-title {
+  font-family: var(--font-secondary);
+  font-size: 1.4rem;
+  color: var(--color-text);
+  margin-bottom: 1rem;
+}
+
+.receta-title a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.receta-title a:hover {
+  color: var(--color-primary);
+}
+
+.receta-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  font-size: 0.9rem;
+  color: var(--color-text-light);
+}
+
+.receta-meta span {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.receta-meta i {
+  color: var(--color-secondary);
+}
+
+/* Mensaje cuando no hay recetas */
+.no-recetas {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: white;
+  border-radius: 1rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.no-recetas i {
+  font-size: 4rem;
+  color: var(--color-accent);
+  margin-bottom: 1.5rem;
+}
+
+.no-recetas h3 {
+  font-family: var(--font-secondary);
+  color: var(--color-text);
+  margin-bottom: 1rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .categorias-container {
+    padding: 15px;
+  }
+  
+  .categorias-filtro {
+    position: static;
+    padding: 1rem;
+  }
+  
+  .btn-categoria {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+  
+  .grid-recetas {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+  }
+  
+  .receta-img {
+    height: 180px;
+  }
+}
+
+@media (max-width: 480px) {
+  .grid-recetas {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  
+  .categorias-filtro {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .btn-categoria {
+    text-align: center;
+  }
+}

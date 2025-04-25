@@ -1,0 +1,17 @@
+<div class="usuario-card">
+    <div class="usuario-avatar">
+        {% if usuario.profile.profile_image %}
+            <img src="{{ usuario.profile.profile_image.url }}" alt="{{ usuario.username }}">
+        {% else %}
+            <i class="fas fa-user"></i>
+        {% endif %}
+    </div>
+    <div class="usuario-info">
+        <h3 class="usuario-nombre">
+            <a href="{% url 'perfil_publico' usuario.username %}">{{ usuario.username }}</a>
+        </h3>
+        <div class="usuario-meta">
+            <span>{{ usuario.recipe_set.count }} recetas</span>
+        </div>
+    </div>
+</div>

@@ -29,8 +29,6 @@
                 Por: {{ receta.author.username }} | {{ receta.created_at|date:"d M Y" }}
             </p>
         </div>
-    {% empty %}
-        <p>No hay recetas recientes.</p>
     {% endfor %}
 </div>
 
