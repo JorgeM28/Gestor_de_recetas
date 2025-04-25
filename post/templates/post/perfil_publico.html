@@ -332,11 +332,11 @@
         </div>
         {% endif %}
 
-        {% if user.favorites.exists %}
+        {% if favoritos %}
         <div class="perfil-section">
-            <h2 class="section-title"><i class="fas fa-heart"></i> Recetas Favoritas</h2>
+            <h2 class="section-title"><i class="fas fa-heart"></i> Recetas Favoritas de {{ profile_user.username }}</h2>
             <div class="grid-recetas">
-                {% for favorite in user.favorites.all %}
+                {% for favorite in favoritos %}
                     <div class="tarjeta-receta">
                         {% if favorite.recipe.recipe_image %}
                             <div class="receta-img">
