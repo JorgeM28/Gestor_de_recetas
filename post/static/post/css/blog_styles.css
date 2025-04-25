@@ -65,7 +65,7 @@
 .post-category {
     display: inline-block;
     background-color: #e9f5ff;
-    color: #007bff;
+    color: #2E7D32;
     padding: 5px 10px;
     border-radius: 15px;
     font-size: 0.8rem;
@@ -84,7 +84,7 @@
 }
 
 .post-title a:hover {
-    color: #007bff;
+    color: #2E7D32;
 }
 
 .post-excerpt {
@@ -257,7 +257,7 @@
 }
 
 .btn-new-post:hover {
-    background-color: #0069d9;
+    background-color: #2E7D32;
     transform: translateY(-5px);
 }
 

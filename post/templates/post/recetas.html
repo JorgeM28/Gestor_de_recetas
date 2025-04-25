@@ -10,7 +10,7 @@
 <div class="recetas-container">
     <div class="recetas-header">
         <h1><i class="fas fa-utensils"></i> Mis Recetas</h1>
-        <a href="{% url 'nueva_receta' %}" class="btn-nueva-receta">
+        <a href="{% url 'post:nueva_receta' %}" class="btn-nueva-receta">
             <i class="fas fa-plus"></i> Nueva Receta
         </a>
     </div>
@@ -41,7 +41,7 @@
                     
                     <div class="receta-content">
                         <h2 class="receta-title">
-                            <a href="{% url 'detalle_receta' receta.id %}">{{ receta.title }}</a>
+                            <a href="{% url 'post:detalle_receta' receta.id %}">{{ receta.title }}</a>
                         </h2>
                         
                         <div class="receta-meta">
@@ -58,14 +58,14 @@
                         </p>
                         
                         <div class="receta-actions">
-                            <a href="{% url 'detalle_receta' receta.id %}" class="btn-ver">
+                            <a href="{% url 'post:detalle_receta' receta.id %}" class="btn-ver">
                                 <i class="fas fa-eye"></i> Ver
                             </a>
                             {% if user == receta.author or user.is_superuser or user.is_staff %}
-                                <a href="{% url 'editar_receta' receta.id %}" class="btn-editar">
+                                <a href="{% url 'post:editar_receta' receta.id %}" class="btn-editar">
                                     <i class="fas fa-edit"></i> Editar
                                 </a>
-                                <a href="{% url 'eliminar_receta' receta.id %}" class="btn-eliminar">
+                                <a href="{% url 'post:eliminar_receta' receta.id %}" class="btn-eliminar">
                                     <i class="fas fa-trash"></i> Eliminar
                                 </a>
                             {% endif %}
@@ -79,7 +79,7 @@
             <i class="fas fa-book-open"></i>
             <h3>No tienes recetas aún</h3>
             <p>¡Comienza a compartir tus deliciosas creaciones!</p>
-            <a href="{% url 'nueva_receta' %}" class="btn-primera-receta">
+            <a href="{% url 'post:nueva_receta' %}" class="btn-primera-receta">
                 <i class="fas fa-plus"></i> Crear Primera Receta
             </a>
         </div>

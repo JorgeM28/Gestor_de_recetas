@@ -1,54 +1,87 @@
 :root {
-    --color-primary: #6b48ff;
-    --color-secondary: #4ecdc4;
-    --color-accent: #ff6b6b;
-    --color-background: #f0f2f5;
-    --color-surface: #ffffff;
-    --color-text: #2d3436;
-    --color-text-light: #636e72;
-    --color-border: #e2e8f0;
-    --color-success: #10b981;
-    --color-warning: #f59e0b;
-    --color-danger: #ef4444;
-    --gradient-primary: linear-gradient(135deg, var(--color-primary) 0%, #8466ff 100%);
-    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
-    --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+    /* Nueva paleta de colores verdes */
+    --color-primary: #2E7D32;      /* Verde bosque - color principal */
+    --color-secondary: #43A047;    /* Verde medio */
+    --color-accent: #00C853;       /* Verde brillante - para acentos */
+    --color-light: #81C784;        /* Verde menta - para elementos ligeros */
+    --color-ultralight: #E8F5E9;   /* Verde casi blanco - para fondos */
+    --color-dark: #1B5E20;         /* Verde oscuro - para contraste */
+    
+    /* Colores complementarios */
+    --color-cream: #FFF8E1;        /* Crema suave - fondo alternativo */
+    --color-brown: #795548;        /* Marrón - para contraste con verdes */
+    --color-background: #F5F5F5;   /* Gris muy claro - fondo principal */
+    --color-surface: #FFFFFF;      /* Blanco puro - superficie de tarjetas */
+    --color-text: #33691E;         /* Verde bosque oscuro - texto principal */
+    --color-text-light: #558B2F;   /* Verde oliva - texto secundario */
+    --color-border: #C8E6C9;       /* Verde pálido - para bordes sutiles */
+    
+    /* Estados de interacción */
+    --color-success: #388E3C;      /* Verde éxito */
+    --color-warning: #FF9800;      /* Naranja advertencia */
+    --color-danger: #D32F2F;       /* Rojo error */
+    
+    /* Gradientes */
+    --gradient-primary: linear-gradient(135deg, #2E7D32 0%, #81C784 100%);
+    --gradient-header: linear-gradient(120deg, #1B5E20 0%, #43A047 100%);
+    --gradient-card: linear-gradient(to bottom, #FFFFFF, #F1F8E9);
+    
+    /* Sombras */
+    --shadow-sm: 0 2px 4px rgba(0, 70, 0, 0.05);
+    --shadow: 0 4px 8px rgba(0, 70, 0, 0.1);
+    --shadow-lg: 0 8px 16px rgba(0, 70, 0, 0.15);
+    
+    /* Bordes redondeados */
     --radius-sm: 0.375rem;
     --radius: 0.5rem;
     --radius-lg: 1rem;
-    --font-primary: 'Poppins', sans-serif;
+    --radius-xl: 2rem;
+    
+    /* Tipografía */
+    --font-primary: 'Montserrat', sans-serif;
     --font-secondary: 'Playfair Display', serif;
 }
 
 /* Estilos base */
-html,
 body {
-    height: 100%;
-    margin: 0;
     font-family: var(--font-primary);
-    background-color: var(--color-background);
+    background-color: var(--color-ultralight);
     color: var(--color-text);
-}
-
-body {
+    line-height: 1.6;
+    background-image: url('/static/post/img/leaf-pattern.png');
+    background-size: 200px;
+    background-blend-mode: overlay;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
 }
 
-main {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-secondary);
+    color: var(--color-dark);
+    font-weight: 600;
 }
 
-/* Navegación */
+a {
+    color: var(--color-primary);
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+a:hover {
+    color: var(--color-accent);
+}
+
+/* Navegación rediseñada */
 #navbar {
-    display: flex;
-    justify-content: space-between;
+    background: var(--color-primary);
     padding: 1rem 2rem;
-    background: var(--gradient-primary);
     box-shadow: var(--shadow);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 }
 
 #navbar ul {
@@ -56,125 +89,437 @@ main {
     list-style: none;
     margin: 0;
     padding: 0;
-    gap: 2rem;
+    gap: 1.5rem;
 }
 
-#navbar ul li {
-    margin: 0;
-}
-
-#navbar a {
-    color: var(--color-surface);
-    font-size: 1rem;
+#navbar ul li a {
+    color: white;
     font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius);
     transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
-#navbar a:hover {
-    color: var(--color-accent);
+#navbar ul li a:hover {
+    background-color: rgba(255, 255, 255, 0.2);
     transform: translateY(-2px);
+}
+
+#navbar ul li a i {
+    font-size: 1.1rem;
+    color: var(--color-light);
+}
+
+/* Links en la barra de navegación */
+#navbar a,
+.navbar a,
+.main-navigation a {
+    color: white !important;
+}
+
+/* Hover de los enlaces */
+#navbar a:hover,
+.navbar a:hover,
+.main-navigation a:hover {
+    color: rgba(255, 255, 255, 0.8) !important;
+    background-color: rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Header rediseñado */
+header {
+    background: var(--gradient-header);
+    color: white;
+    text-align: center;
+    padding: 4rem 2rem;
+    margin-bottom: 2rem;
+    border-bottom-left-radius: 50% 10%;
+    border-bottom-right-radius: 50% 10%;
+    box-shadow: var(--shadow);
+}
+
+header h1 {
+    font-size: 2.8rem;
+    color: white;
+    margin-bottom: 1rem;
+    position: relative;
+    display: inline-block;
+}
+
+header h1::after {
+    content: '';
+    position: absolute;
+    bottom: -0.5rem;
+    left: 50%;
+    width: 100px;
+    height: 3px;
+    background-color: var(--color-light);
+    transform: translateX(-50%);
+}
+
+header p {
+    font-size: 1.2rem;
+    max-width: 700px;
+    margin: 0 auto;
+    opacity: 0.9;
 }
 
 /* Contenido principal */
 .page_content {
     flex: 1;
-    max-width: 1200px;
-    margin: 2rem auto;
-    padding: 0 2rem;
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 1rem 2rem;
     width: 100%;
     box-sizing: border-box;
 }
 
-/* Footer */
-footer {
-    text-align: center;
-    padding: 1.5rem;
-    background: var(--gradient-primary);
-    color: var(--color-surface);
-    margin-top: auto;
-}
-
-/* Utilidades de truncamiento */
-.text-truncate {
+/* Tarjetas de receta */
+.tarjeta-receta {
+    background: var(--gradient-card);
+    border-radius: var(--radius-lg);
     overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.text-truncate-2 {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-}
-
-.text-truncate-3 {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-}
-
-/* Tarjetas de post */
-.post-card {
-    background: var(--color-surface);
-    border-radius: var(--radius);
     box-shadow: var(--shadow);
-    margin-bottom: 1.5rem;
+    transition: all 0.4s ease;
+    border: 1px solid var(--color-border);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.tarjeta-receta:hover {
+    transform: translateY(-8px) scale(1.01);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--color-light);
+}
+
+.receta-img {
+    height: 220px;
     overflow: hidden;
+    position: relative;
+}
+
+.receta-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+}
+
+.tarjeta-receta:hover .receta-img img {
+    transform: scale(1.08);
+}
+
+.receta-img::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 30%;
+    background: linear-gradient(to top, rgba(0,0,0,0.5), transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.tarjeta-receta:hover .receta-img::after {
+    opacity: 1;
+}
+
+.receta-content {
+    padding: 1.5rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.receta-title {
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.receta-title a {
+    color: var(--color-text);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.receta-title a:hover {
+    color: var(--color-primary);
+}
+
+.receta-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+}
+
+.receta-meta span {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: var(--color-ultralight);
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--radius-xl);
+    color: var(--color-text);
+}
+
+.receta-meta i {
+    color: var(--color-primary);
+}
+
+/* Botones rediseñados */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius);
+    font-weight: 500;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: none;
+    font-family: var(--font-primary);
+    text-decoration: none;
+}
+
+.btn-primary {
+    background-color: var(--color-primary);
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: var(--color-dark);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+}
+
+.btn-secondary {
+    background-color: var(--color-light);
+    color: var(--color-dark);
+}
+
+.btn-secondary:hover {
+    background-color: var(--color-secondary);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+}
+
+.btn-danger {
+    background-color: var(--color-danger);
+    color: white;
+}
+
+.btn-danger:hover {
+    background-color: #b71c1c;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+}
+
+/* Footer rediseñado */
+footer {
+    background: var(--gradient-primary);
+    color: white;
+    text-align: center;
+    padding: 3rem 0;
+    margin-top: 3rem;
+    border-top-left-radius: 50% 10%;
+    border-top-right-radius: 50% 10%;
+}
+
+footer p {
+    margin: 0;
+    opacity: 0.9;
+}
+
+footer i.fa-heart {
+    color: var(--color-accent);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+/* Corrección para el pie de página con color inconsistente */
+footer, 
+.footer,
+body > footer,
+#footer,
+.site-footer,
+.page_content + footer {
+    background: var(--gradient-primary) !important;
+    color: white !important;
+    text-align: center;
+    padding: 3rem 0;
+    margin-top: 3rem;
+    border-top-left-radius: 50% 10%;
+    border-top-right-radius: 50% 10%;
+    background-image: var(--gradient-primary) !important;
+    background-color: var(--color-primary) !important;
+}
+
+footer a, 
+.footer a,
+#footer a,
+.site-footer a {
+    color: white !important;
+    text-decoration: underline;
+    opacity: 0.9;
+    transition: opacity 0.3s ease;
+}
+
+footer a:hover,
+.footer a:hover,
+#footer a:hover,
+.site-footer a:hover {
+    opacity: 1;
+    color: var(--color-ultralight) !important;
+}
+
+/* Formularios */
+.form-container {
+    background-color: white;
+    padding: 2rem;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+    border: 1px solid var(--color-border);
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--color-text);
+    font-weight: 500;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+textarea,
+select {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 2px solid var(--color-border);
+    border-radius: var(--radius);
+    background-color: var(--color-ultralight);
+    color: var(--color-text);
+    font-family: var(--font-primary);
     transition: all 0.3s ease;
 }
 
-.post-card:hover {
+input:focus,
+textarea:focus,
+select:focus {
+    outline: none;
+    border-color: var(--color-secondary);
+    box-shadow: 0 0 0 3px rgba(67, 160, 71, 0.2);
+}
+
+/* Grids de recetas */
+.grid-recetas {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+/* Perfil de usuario */
+.perfil-container {
+    background-color: white;
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--color-border);
+}
+
+.perfil-avatar {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 5px solid var(--color-light);
+    box-shadow: var(--shadow);
+}
+
+/* Chat y notificaciones */
+.chat-container {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    z-index: 1000;
+}
+
+.chat-button {
+    background-color: #2E7D32 !important; /* Verde bosque */
+    color: white;
+    padding: 1rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+    transition: all 0.3s ease;
+}
+
+.chat-button:hover {
+    background-color: var(--color-secondary);
     transform: translateY(-5px);
     box-shadow: var(--shadow-lg);
 }
 
-.post-content {
-    padding: 1.5rem;
+.notification-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: var(--color-danger);
+    color: white;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 500;
 }
 
-.post-title {
-    font-family: var(--font-secondary);
-    font-size: 1.25rem;
-    color: var(--color-text);
-    margin-bottom: 1rem;
+/* Estilos para el icono de campana */
+.notifications-icon,
+.notification-bell,
+[class*="notification-icon"],
+[class*="bell-icon"] {
+    color: white !important; /* Aseguramos que el icono sea blanco */
+    font-size: 1.2rem;       /* Tamaño adecuado */
 }
 
-.post-excerpt {
-    color: var(--color-text-light);
-    margin-bottom: 1rem;
+/* Estilo para el indicador de número de notificaciones */
+.notification-badge {
+    background-color: #FF5722 !important; /* Naranja para contrastar con el verde */
+    color: white !important;
+    font-weight: bold;
+    border: 2px solid white;
 }
 
-.post-author {
-    color: var(--color-text-light);
-    font-size: 0.9rem;
-}
-
-/* Perfil */
-.perfil-container {
-    max-width: 800px;
-    margin: 2rem auto;
-    padding: 2rem;
-    background: var(--color-surface);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow);
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-    #navbar {
-        padding: 1rem;
-    }
-
-    .page_content {
-        padding: 1rem;
-        margin: 1rem auto;
-    }
-
-    .perfil-container {
-        padding: 1rem;
-    }
+/* Aseguramos que el navbar tenga el color verde definido */
+#navbar, 
+.navbar,
+.main-navigation,
+nav.main-nav {
+    background-color: #2E7D32 !important; /* Verde bosque */
+    color: white !important;
 }

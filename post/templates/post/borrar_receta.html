@@ -82,7 +82,7 @@
     <form method="post">
         {% csrf_token %}
         <div class="delete-actions">
-            <a href="{% url 'recetas' %}" class="btn-cancel">Cancelar</a>
+            <a href="{% url 'post:recetas' %}" class="btn-cancel">Cancelar</a>
             <button type="submit" class="btn-delete">Eliminar Definitivamente</button>
         </div>
     </form>

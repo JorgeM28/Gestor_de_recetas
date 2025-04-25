@@ -73,7 +73,7 @@
     }
     
     .btn-mark-read {
-        background-color: #007bff;
+        background-color: #2E7D32 !important;
         color: white;
         border: none;
         padding: 6px 12px;
@@ -83,11 +83,11 @@
     }
     
     .btn-mark-read:hover {
-        background-color: #0069d9;
+        background-color: #2E7D32 !important;
     }
     
     .suggestion-unread {
-        border-left: 4px solid #007bff;
+        border-left: 4px solid #2E7D32 !important;
     }
     
     .suggestion-read {
@@ -149,7 +149,7 @@
 
 <script>
     function markAsRead(suggestionId) {
-        fetch(`{% url 'mark_suggestion_read' 0 %}`.replace('0', suggestionId), {
+        fetch(`{% url 'post:mark_suggestion_read' 0 %}`.replace('0', suggestionId), {
             method: 'POST',
             headers: {
                 'X-Requested-With': 'XMLHttpRequest',

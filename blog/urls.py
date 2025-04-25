@@ -21,7 +21,8 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    path('', include('post.urls')),
+    # Añadir el parámetro namespace='post'
+    path('', include(('post.urls', 'post'), namespace='post')),
     path('admin/', admin.site.urls),
     path('login/', LoginView.as_view(template_name='post/login.html'), name='login'),
     path('logout/', LogoutView.as_view(), name='logout'),

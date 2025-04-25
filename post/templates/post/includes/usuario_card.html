@@ -1,17 +1,16 @@
-<div class="usuario-card">
-    <div class="usuario-avatar">
-        {% if usuario.profile.profile_image %}
-            <img src="{{ usuario.profile.profile_image.url }}" alt="{{ usuario.username }}">
+<div class="user-result">
+    <div class="user-avatar">
+        {% if usuario.profile and usuario.profile.profile_image %}
+            <img src="{{ usuario.profile.profile_image.url }}" alt="{{ usuario.username }}" class="profile-avatar">
         {% else %}
-            <i class="fas fa-user"></i>
+            <img src="/static/post/img/default-avatar.png" alt="{{ usuario.username }}" class="profile-avatar">
         {% endif %}
     </div>
-    <div class="usuario-info">
-        <h3 class="usuario-nombre">
-            <a href="{% url 'perfil_publico' usuario.username %}">{{ usuario.username }}</a>
-        </h3>
-        <div class="usuario-meta">
-            <span>{{ usuario.recipe_set.count }} recetas</span>
-        </div>
+    
+    <div class="user-info">
+        <h3><a href="{% url 'post:perfil_publico' usuario.username %}">{{ usuario.username }}</a></h3>
+        {% if usuario.first_name or usuario.last_name %}
+            <p class="user-fullname">{{ usuario.first_name }} {{ usuario.last_name }}</p>
+        {% endif %}
     </div>
 </div>

@@ -158,7 +158,7 @@
         }
 
         .search-container button {
-            background-color: #007bff;
+            background-color: #2E7D32;
             color: white;
             border: none;
             padding: 8px 12px;
@@ -746,21 +746,22 @@
         
         <nav id="navbar">
             <ul>
-                <li><a href="{% url 'index' %}"><i class="fas fa-home"></i> Inicio</a></li>
+                <li><a href="{% url 'post:index' %}"><i class="fas fa-home"></i> Inicio</a></li>
                 {% if user.is_authenticated %}
-                    <li><a href="{% url 'categorias' %}"><i class="fas fa-tag"></i> Categorías</a></li>
-                    <li><a href="{% url 'recetas' %}"><i class="fas fa-utensils"></i> Mis Recetas</a></li>
+                    <li><a href="{% url 'post:categorias' %}"><i class="fas fa-th-large"></i> Categorías</a></li>
+                    <li><a href="{% url 'post:recetas' %}"><i class="fas fa-utensils"></i> Mis Recetas</a></li>
                     
                 {% endif %}
 
                 {% if user.is_staff or user.is_superuser %}
     <li><a href="{% url 'admin:index' %}"><i class="fas fa-cog"></i> Administración</a></li>
-    <li><a href="{% url 'suggestions_list' %}"><i class="fas fa-comment-dots"></i> Sugerencias <span class="admin-badge" id="admin-suggestions-count"></span></a></li>
+    <li><a href="{% url 'post:suggestions_list' %}"><i class="fas fa-comment-dots"></i> Sugerencias <span class="admin-badge" id="admin-suggestions-count"></span></a></li>
 {% endif %}
+                
             </ul>
             
             <div class="search-container">
-                <form action="{% url 'buscar' %}" method="GET" id="search-form">
+                <form action="{% url 'post:buscar' %}" method="GET" id="search-form">
                     <input type="text" name="q" id="search-input" placeholder="Buscar recetas o usuarios..." autocomplete="off">
                     <button type="submit"><i class="fas fa-search"></i></button>
                 </form>
@@ -770,27 +771,31 @@
             <div>
                 {% if user.is_authenticated %}
                     <p>
-                        <a href="{% url 'perfil' %}" class="btn-profile"><i class="fas fa-user-circle"></i> Mi Perfil</a> | 
+                        <a href="{% url 'post:perfil' %}" class="btn-profile"><i class="fas fa-user-circle"></i> Mi Perfil</a> | 
                         <a class="btn-logout" href="#" onClick="document.getElementById('logoutform').submit()">
                             <i class="fas fa-sign-out-alt"></i> Salir
                         </a>
-                        <form id="logoutform" method="POST" action="{% url 'logout' %}">
+                        <form id="logoutform" method="POST" action="{% url 'post:logout' %}">
                             {% csrf_token %}
                             <input type="hidden">
                         </form>
                     </p>
                 {% else %}
-                    <a href="{% url 'login' %}" class="btn-login"><i class="fas fa-sign-in-alt"></i> Iniciar Sesión</a>
+                    <a href="{% url 'post:login' %}" class="btn-login"><i class="fas fa-sign-in-alt"></i> Iniciar Sesión</a>
                 {% endif %}
             </div>
         </nav>
         
+       
+
         <section class="page_content">
             {% block content %}{% endblock %}
         </section>
         
         <footer>
             <p>UIS Programación Web 2025-I | Desarrollado con <i class="fas fa-heart" style="color: #dc3545;"></i> y Django</p>
+            <div class="footer-links">
+            </div>
         </footer>
     </main>
 
@@ -808,9 +813,15 @@
                 }
             });
         });
+
+        function redirectToLogin() {
+            window.location.href = "{% url 'post:login' %}";
+        }
     </script>
 
     <script>
+        const suggestionsUrl = "{% url 'post:suggestions_list' %}";
+
         document.addEventListener('DOMContentLoaded', function() {
             const searchInput = document.getElementById('search-input');
             const resultsPreview = document.getElementById('search-results-preview');
@@ -1041,7 +1052,7 @@
                 
                 const formData = new FormData(suggestionForm);
                 
-                fetch('{% url "submit_suggestion" %}', {
+                fetch('{% url "post:submit_suggestion" %}', {
                     method: 'POST',
                     body: formData,
                     headers: {
@@ -1088,7 +1099,7 @@
             
             // Cargar notificaciones
             function loadNotifications() {
-                fetch('{% url "get_notifications" %}', {
+                fetch('{% url "post:get_notifications" %}', {
                     headers: {
                         'X-Requested-With': 'XMLHttpRequest',
                         'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
@@ -1169,7 +1180,7 @@
             
             // Marcar notificación como leída
             function markAsRead(notificationId) {
-                fetch(`{% url "mark_notification_read" 0 %}`.replace('0', notificationId), {
+                fetch(`{% url "post:mark_notification_read" 0 %}`.replace('0', notificationId), {
                     method: 'POST',
                     headers: {
                         'X-Requested-With': 'XMLHttpRequest',
@@ -1194,7 +1205,7 @@
             setInterval(function() {
                 if (!notificationsPopup.classList.contains('show')) {
                     // Solo actualizar contador si el popup está cerrado
-                    fetch('{% url "get_notifications" %}')
+                    fetch('{% url "post:get_notifications" %}')
                     .then(response => response.json())
                     .then(data => {
                         if (data.unread_count > 0) {

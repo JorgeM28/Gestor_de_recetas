@@ -262,7 +262,7 @@
                             
                             <div class="receta-content">
                                 <h3 class="receta-title">
-                                    <a href="{% url 'detalle_receta' receta.id %}">{{ receta.title }}</a>
+                                    <a href="{% url 'post:detalle_receta' receta.id %}">{{ receta.title }}</a>
                                 </h3>
                                 
                                 <div class="receta-meta">
@@ -302,13 +302,13 @@
                         
                         <div class="receta-content">
                             <h3 class="receta-title">
-                                <a href="{% url 'detalle_receta' repost.original_recipe.id %}">{{ repost.original_recipe.title }}</a>
+                                <a href="{% url 'post:detalle_receta' repost.original_recipe.id %}">{{ repost.original_recipe.title }}</a>
                             </h3>
                             
                             <div class="repost-meta">
                                 <span class="original-author">
                                     <i class="fas fa-user"></i> Original por: 
-                                    <a href="{% url 'perfil_publico' repost.original_recipe.author.username %}">
+                                    <a href="{% url 'post:perfil_publico' repost.original_recipe.author.username %}">
                                         {{ repost.original_recipe.author.username }}
                                     </a>
                                 </span>

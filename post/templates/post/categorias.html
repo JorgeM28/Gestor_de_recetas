@@ -5,6 +5,25 @@
 <title>Explorar Categorías - Recetas</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="{% static 'post/css/categorias.css' %}">
+<style>
+  /* Corrección para encabezado morado directo en la página */
+  .categorias-header {
+    background: linear-gradient(120deg, #1B5E20, #43A047) !important;
+    background-color: #2E7D32 !important;
+    color: white !important;
+  }
+  
+  /* Asegurar que el botón activo sea verde */
+  .btn-categoria.active,
+  .categorias-filtro a.active {
+    background: linear-gradient(135deg, #2E7D32, #81C784) !important;
+    color: white !important;
+  }
+  
+  .btn-categoria.active i {
+    color: white !important;
+  }
+</style>
 {% endblock extra_head %}
 
 {% block content %}
@@ -15,12 +34,13 @@
     </div>
     
     <div class="categorias-filtro">
-        <a href="{% url 'categorias' %}" 
+        <a href="{% url 'post:categorias' %}" 
            class="btn-categoria {% if not categoria_seleccionada %}active{% endif %}">
            <i class="fas fa-border-all"></i> Todas
         </a>
         {% for categoria in categorias %}
-            <a href="{% url 'categorias' %}?categoria={{ categoria.id }}" 
+
+            <a href="{% url 'post:categorias' %}?categoria={{ categoria.id }}" 
                class="btn-categoria {% if categoria_seleccionada|stringformat:'s' == categoria.id|stringformat:'s' %}active{% endif %}">
                <i class="fas fa-tag"></i> {{ categoria.name }}
             </a>
@@ -39,7 +59,7 @@
                     
                     <div class="receta-content">
                         <h2 class="receta-title">
-                            <a href="{% url 'detalle_receta' receta.id %}">{{ receta.title }}</a>
+                            <a href="{% url 'post:detalle_receta' receta.id %}">{{ receta.title }}</a>
                         </h2>
                         
                         <div class="receta-meta">

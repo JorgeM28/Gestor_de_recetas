@@ -1,87 +1,89 @@
 .detalle-receta {
-    max-width: 800px;
-    margin: 0 auto 30px;
-    padding: 25px;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    background-color: var(--color-surface);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--color-border);
 }
 
 .receta-title {
-    font-size: 2.2rem;
-    color: #333;
-    margin-bottom: 15px;
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+    color: var(--color-dark);
     text-align: center;
+    position: relative;
+}
+
+.receta-title::after {
+    content: "";
+    position: absolute;
+    bottom: -0.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 3px;
+    background-color: var(--color-light);
 }
 
 .receta-meta {
     display: flex;
-    justify-content: space-between;
     flex-wrap: wrap;
-    padding-bottom: 20px;
-    border-bottom: 1px solid #eee;
-    margin-bottom: 20px;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--color-border);
 }
 
 .receta-author {
     display: flex;
     align-items: center;
+    gap: 1rem;
 }
 
-.author-img, .author-icon {
-    width: 40px;
-    height: 40px;
+.author-img {
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
-    margin-right: 10px;
-    object-fit: cover;
-}
-
-.author-icon {
-    font-size: 40px;
-    color: #aaa;
-}
-
-.author-info {
-    display: flex;
-    flex-direction: column;
-}
-
-.receta-date {
-    color: #888;
-    font-size: 0.9rem;
+    border: 2px solid var(--color-light);
 }
 
 .receta-info {
     display: flex;
     flex-wrap: wrap;
-    gap: 15px;
+    gap: 1.5rem;
+    margin-top: 1rem;
 }
 
 .info-item {
     display: flex;
     align-items: center;
-    color: #666;
+    gap: 0.5rem;
+    background-color: var(--color-ultralight);
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius);
     font-size: 0.9rem;
 }
 
 .info-item i {
-    margin-right: 5px;
-    color: #007bff;
+    color: var(--color-primary);
 }
 
 .receta-image {
-    width: 100%;
-    margin: 20px 0;
-    border-radius: 10px;
+    border-radius: var(--radius-lg);
     overflow: hidden;
-    max-height: 400px; /* Limita la altura máxima */
+    box-shadow: var(--shadow);
+    margin: 2rem 0;
 }
 
 .receta-image img {
     width: 100%;
-    height: 100%;
-    object-fit: cover; /* Mantiene las proporciones recortando si es necesario */
-    display: block;
+    height: auto;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.receta-image:hover img {
+    transform: scale(1.03);
 }
 
 .receta-content {
@@ -98,50 +100,49 @@
 }
 
 .receta-section {
-    margin-bottom: 30px;
+    margin: 2rem 0;
 }
 
 .receta-section h2 {
+    color: var(--color-dark);
+    margin-bottom: 1rem;
     font-size: 1.5rem;
-    color: #333;
-    margin-bottom: 15px;
-    padding-bottom: 10px;
-    border-bottom: 2px solid #f0f0f0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-bottom: 2px solid var(--color-border);
+    padding-bottom: 0.75rem;
 }
 
 .receta-section h2 i {
-    color: #007bff;
-    margin-right: 8px;
+    color: var(--color-primary);
 }
 
 .ingredientes {
-    font-size: 1rem;
-    line-height: 1.6;
+    list-style: none;
+    padding: 0;
 }
 
 .ingrediente-item {
-    display: flex;
-    align-items: center;
-    margin-bottom: 8px;
+    margin-bottom: 0.75rem;
+    padding-left: 1.5rem;
+    position: relative;
 }
 
-.ingrediente-item input {
-    margin-right: 10px;
-}
-
-.ingrediente-item label {
-    cursor: pointer;
-}
-
-.ingrediente-item input:checked + label {
-    text-decoration: line-through;
-    color: #aaa;
+.ingrediente-item:before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: var(--color-primary);
+    font-size: 1.2rem;
 }
 
 .instrucciones {
-    font-size: 1rem;
     line-height: 1.8;
-    color: #333;
+}
+
+.instrucciones p {
+    margin-bottom: 1rem;
 }
 
 .receta-actions {
@@ -195,12 +196,12 @@
 
 /* Comentarios */
 .comentarios-section {
-    max-width: 800px;
-    margin: 30px auto;
-    padding: 25px;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    background-color: var(--color-surface);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    box-shadow: var(--shadow);
+    margin-top: 3rem;
+    border: 1px solid var(--color-border);
 }
 
 .comentarios-section h3 {
@@ -217,41 +218,36 @@
 }
 
 .comentario {
-    border-bottom: 1px solid #eee;
-    padding: 15px 0;
+    border-bottom: 1px solid var(--color-border);
+    padding: 1.5rem 0;
+}
+
+.comentario:last-child {
+    border-bottom: none;
 }
 
 .comentario-header {
     display: flex;
     align-items: center;
-    margin-bottom: 10px;
+    margin-bottom: 1rem;
 }
 
-.comentario-author-img, .comentario-author-icon {
-    width: 30px;
-    height: 30px;
+.comentario-author-img {
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
-    margin-right: 10px;
-    object-fit: cover;
-}
-
-.comentario-author-icon {
-    font-size: 30px;
-    color: #aaa;
-}
-
-.comentario-meta {
-    display: flex;
-    flex-direction: column;
+    margin-right: 1rem;
+    border: 2px solid var(--color-light);
 }
 
 .comentario-author {
-    font-weight: 500;
+    font-weight: 600;
+    color: var(--color-text);
 }
 
 .comentario-date {
-    font-size: 0.8rem;
-    color: #888;
+    color: var(--color-text-light);
+    font-size: 0.85rem;
 }
 
 .comentario-content {
@@ -281,28 +277,33 @@
 }
 
 .nuevo-comentario textarea {
+    border: 2px solid var(--color-border);
+    border-radius: var(--radius);
+    padding: 1rem;
     width: 100%;
-    padding: 12px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 1rem;
-    margin-bottom: 15px;
-    resize: vertical;
+    margin-bottom: 1rem;
+    font-family: var(--font-primary);
+}
+
+.nuevo-comentario textarea:focus {
+    border-color: var(--color-primary);
+    outline: none;
 }
 
 .btn-comentar {
-    background-color: #007bff;
+    background-color: var(--color-primary);
     color: white;
     border: none;
-    padding: 10px 15px;
-    border-radius: 5px;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius);
     cursor: pointer;
-    font-size: 0.9rem;
-    transition: background-color 0.2s;
+    font-weight: 500;
+    transition: all 0.3s ease;
 }
 
 .btn-comentar:hover {
-    background-color: #0069d9;
+    background-color: var(--color-dark);
+    transform: translateY(-2px);
 }
 
 .login-to-comment {
@@ -368,14 +369,16 @@
 }
 
 .rating-form {
-    margin-top: 15px;
+    background-color: var(--color-ultralight);
+    padding: 1.5rem;
+    border-radius: var(--radius);
+    margin-top: 2rem;
 }
 
 .star-rating-container {
     display: flex;
     align-items: center;
-    gap: 10px;
-    margin-bottom: 10px;
+    gap: 1rem;
 }
 
 .rating-options {
@@ -388,31 +391,35 @@
 
 .rating-options label {
     cursor: pointer;
-    font-size: 1.5rem;
+    font-size: 1.8rem;
     color: #ddd;
-    padding: 0 2px;
+    transition: all 0.2s ease;
 }
 
-.rating-options input[type="radio"]:checked ~ label {
-    color: #FFD700;
+.rating-options label:hover {
+    transform: scale(1.2);
 }
 
-.rating-options label:hover,
-.rating-options label:hover ~ label {
+.rating-options input[type="radio"]:checked + label i,
+.rating-options label:hover i {
     color: #FFD700;
 }
 
 .btn-calificar {
-    background-color: #28a745;
+    background-color: var(--color-primary);
     color: white;
     border: none;
-    padding: 6px 12px;
-    border-radius: 4px;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius);
     cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    margin-top: 1rem;
 }
 
 .btn-calificar:hover {
-    background-color: #218838;
+    background-color: var(--color-dark);
+    transform: translateY(-2px);
 }
 
 /* Estilos para los filtros de búsqueda */

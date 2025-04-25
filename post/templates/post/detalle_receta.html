@@ -17,9 +17,8 @@
             {% else %}
                 <i class="fas fa-user-circle author-icon"></i>
             {% endif %}
-            <!-- Reemplaza donde aparece el nombre del autor -->
             <div class="author-info">
-                <a href="{% url 'perfil_publico' receta.author.username %}">{{ receta.author.username }}</a>
+                <a href="{% url 'post:perfil_publico' receta.author.username %}" class="author-name">{{ receta.author.username }}</a>
                 <span class="receta-date">{{ receta.created_at|date:"d M Y" }}</span>
             </div>
         </div>
@@ -86,7 +85,7 @@
         </div>
         
         {% if user.is_authenticated and user != receta.author %}
-            <form method="post" action="{% url 'rate_recipe' receta.id %}" class="rating-form">
+            <form method="post" action="{% url 'post:rate_recipe' receta.id %}" class="rating-form">
                 {% csrf_token %}
                 <div class="star-rating-container">
                     <p>Tu calificación:</p>
@@ -105,20 +104,20 @@
     
     {% if user.is_authenticated %}
         <div class="receta-actions">
-            <a href="{% url 'recetas' %}" class="btn-volver"><i class="fas fa-arrow-left"></i> Volver a Recetas</a>
+            <a href="{% url 'post:recetas' %}" class="btn-volver"><i class="fas fa-arrow-left"></i> Volver a Recetas</a>
             
             {% if user != receta.author %}
-                <a href="{% url 'repost_recipe' receta.id %}" class="btn-repost"><i class="fas fa-retweet"></i> Repostear</a>
+                <a href="{% url 'post:repost_recipe' receta.id %}" class="btn-repost"><i class="fas fa-retweet"></i> Repostear</a>
             {% endif %}
             
             {% if user == receta.author or user.is_superuser or user.is_staff %}
-                <a href="{% url 'editar_receta' receta.id %}" class="btn-editar"><i class="fas fa-edit"></i> Editar</a>
-                <a href="{% url 'eliminar_receta' receta.id %}" class="btn-eliminar"><i class="fas fa-trash"></i> Eliminar</a>
+                <a href="{% url 'post:editar_receta' receta.id %}" class="btn-editar"><i class="fas fa-edit"></i> Editar</a>
+                <a href="{% url 'post:eliminar_receta' receta.id %}" class="btn-eliminar"><i class="fas fa-trash"></i> Eliminar</a>
             {% endif %}
         </div>
     {% else %}
         <div class="receta-actions">
-            <a href="{% url 'index' %}" class="btn-volver"><i class="fas fa-arrow-left"></i> Volver al Inicio</a>
+            <a href="{% url 'post:index' %}" class="btn-volver"><i class="fas fa-arrow-left"></i> Volver al Inicio</a>
         </div>
     {% endif %}
 </div>
@@ -146,7 +145,7 @@
     </div>
     
     {% if user.is_authenticated and user != receta.author %}
-        <form method="post" action="{% url 'rate_recipe' receta.id %}" class="rating-form">
+        <form method="post" action="{% url 'post:rate_recipe' receta.id %}" class="rating-form">
             {% csrf_token %}
             <div class="star-rating-container">
                 <p>Tu calificación:</p>
@@ -175,7 +174,9 @@
                     <i class="fas fa-user-circle comentario-author-icon"></i>
                 {% endif %}
                 <div class="comentario-meta">
-                    <span class="comentario-author">{{ comentario.author.username }}</span>
+                    <span class="comentario-author">
+                        <a href="{% url 'post:perfil_publico' comentario.author.username %}">{{ comentario.author.username }}</a>
+                    </span>
                     <span class="comentario-date">{{ comentario.created_at|date:"d M Y H:i" }}</span>
                 </div>
             </div>
@@ -198,7 +199,7 @@
     {% else %}
     <div class="login-to-comment">
         <p>Inicia sesión para dejar un comentario</p>
-        <a href="{% url 'login' %}" class="btn-login">Iniciar Sesión</a>
+        <a href="{% url 'post:login' %}" class="btn-login">Iniciar Sesión</a>
     </div>
     {% endif %}
 </div>

@@ -127,9 +127,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 # Redirecciones para login y logout
-LOGIN_REDIRECT_URL = 'index'
-LOGOUT_REDIRECT_URL = 'login'
-LOGIN_URL = '/login/'
+LOGIN_URL = 'post:login'
+LOGIN_REDIRECT_URL = 'post:index'
+LOGOUT_REDIRECT_URL = 'post:index'
 
 # Media Files
 MEDIA_URL = '/media/'

@@ -57,13 +57,13 @@ def perfil(request):
             profile.profile_image = None
             profile.save()
             messages.success(request, 'Foto de perfil eliminada correctamente')
-            return redirect('perfil')
+            return redirect('post:perfil')
         
         if u_form.is_valid() and p_form.is_valid():
             u_form.save()
             p_form.save()
             messages.success(request, 'Perfil actualizado correctamente')
-            return redirect('perfil')
+            return redirect('post:perfil')
     else:
         u_form = UserUpdateForm(instance=request.user)
         p_form = ProfileUpdateForm(instance=profile)
@@ -109,7 +109,7 @@ def nueva_receta(request):
             receta.author = request.user
             receta.save()
             messages.success(request, 'Receta creada correctamente')
-            return redirect('recetas')
+            return redirect('post:nueva_receta')
     else:
         form = RecipeForm()
     return render(request, 'post/nueva_receta.html', {'form': form})
@@ -124,7 +124,7 @@ def editar_receta(request, recipe_id):
     
     if not (es_propietario or es_admin):
         messages.error(request, 'No tienes permiso para editar esta receta.')
-        return redirect('recetas')
+        return redirect('post:recetas')
         
     if request.method == 'POST':
         form = RecipeForm(request.POST, request.FILES, instance=receta)
@@ -136,7 +136,7 @@ def editar_receta(request, recipe_id):
                 receta_actualizada.author = receta.author
             receta_actualizada.save()
             messages.success(request, 'Receta actualizada correctamente')
-            return redirect('recetas')
+            return redirect('post:recetas')
     else:
         form = RecipeForm(instance=receta)
     
@@ -156,12 +156,12 @@ def eliminar_receta(request, recipe_id):
     
     if not (es_propietario or es_admin):
         messages.error(request, 'No tienes permiso para eliminar esta receta.')
-        return redirect('recetas')
+        return redirect('post:recetas')
         
     if request.method == 'POST':
         receta.delete()
         messages.success(request, 'Receta eliminada correctamente')
-        return redirect('recetas')
+        return redirect('post:recetas')
     return render(request, 'post/borrar_receta.html', {'receta': receta})
 
 # Actualiza la función detalle_receta
@@ -194,7 +194,7 @@ def detalle_receta(request, recipe_id):
                     related_recipe=receta
                 )
             messages.success(request, 'Comentario añadido correctamente')
-            return redirect('detalle_receta', recipe_id=receta.id)
+            return redirect('post:detalle_receta', recipe_id=receta.id)
 
     tiempo_total = receta.prep_time + receta.cook_time
     
@@ -213,7 +213,7 @@ def register(request):
             form.save()
             username = form.cleaned_data.get('username')
             messages.success(request, f'¡Cuenta creada para {username}! Ahora puedes iniciar sesión')
-            return redirect('login')
+            return redirect('post:login')  # Cambiar 'login' por 'post:login'
     else:
         form = UserRegisterForm()
     return render(request, 'post/register.html', {'form': form})
@@ -248,13 +248,13 @@ def buscar(request):
             'title': r.title,
             'author': r.author.username,
             'image_url': r.recipe_image.url if r.recipe_image else None,
-            'url': reverse('detalle_receta', args=[r.id])
+            'url': reverse('post:detalle_receta', args=[r.id])
         } for r in recetas]
         
         usuarios_data = [{
             'username': u.username,
             'image_url': u.profile.profile_image.url if hasattr(u, 'profile') and u.profile.profile_image else None,
-            'url': reverse('perfil_publico', args=[u.username])
+            'url': reverse('post:perfil_publico', args=[u.username])
         } for u in usuarios]
         
         return JsonResponse({
@@ -274,6 +274,10 @@ def buscar(request):
     else:
         recetas = Recipe.objects.filter(published=True)
         usuarios = User.objects.none()
+    
+    # Asegúrate de que los perfiles estén precargados para evitar consultas N+1
+    if usuarios:
+        usuarios = usuarios.select_related('profile')
     
     # Aplicar filtro por categoría
     if categoria_id:
@@ -346,7 +350,7 @@ def repost_recipe(request, recipe_id):
                         related_recipe=recipe
                     )
                     
-            return redirect('perfil_publico', username=request.user.username)
+            return redirect('post:perfil_publico', username=request.user.username)
     else:
         initial_data = {}
         if existing_repost:
@@ -407,9 +411,9 @@ def get_notifications(request):
             }
             
             if notification.related_recipe:
-                notification_data['url'] = reverse('detalle_receta', args=[notification.related_recipe.id])
+                notification_data['url'] = reverse('post:detalle_receta', args=[notification.related_recipe.id])
             elif notification.related_suggestion and request.user.is_superuser:
-                notification_data['url'] = reverse('suggestions_list')
+                notification_data['url'] = reverse('post:suggestions_list')  # Añadir el namespace 'post:'
             
             notifications_data.append(notification_data)
         
@@ -424,7 +428,7 @@ def get_notifications(request):
             'error': str(e),
             'notifications': [],
             'unread_count': 0
-        }, status=200)  # Devolvemos 200 con mensaje de error en vez de 500
+        }, status=200)
 
 @login_required
 def mark_notification_read(request, notification_id):
@@ -492,6 +496,6 @@ def rate_recipe(request, recipe_id):
             )
         
         messages.success(request, f'Has calificado esta receta con {rating.value} estrellas')
-        return redirect('detalle_receta', recipe_id=recipe.id)
+        return redirect('post:detalle_receta', recipe_id=recipe.id)
     
-    return redirect('detalle_receta', recipe_id=recipe.id)
+    return redirect('post:detalle_receta', recipe_id=recipe.id)

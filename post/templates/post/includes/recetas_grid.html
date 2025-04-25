@@ -1,0 +1,26 @@
+<div class="receta-card">
+    {% if receta.recipe_image %}
+        <div class="receta-img">
+            <img src="{{ receta.recipe_image.url }}" alt="{{ receta.title }}">
+        </div>
+    {% else %}
+        <div class="receta-img no-image">
+            <i class="fas fa-utensils"></i>
+        </div>
+    {% endif %}
+    
+    <div class="receta-content">
+        <h3 class="receta-title">
+            <a href="{% url 'post:detalle_receta' receta.id %}">{{ receta.title }}</a>
+        </h3>
+        
+        <div class="receta-meta">
+            <span><i class="fas fa-clock"></i> {{ receta.total_time }} min</span>
+            <span><i class="fas fa-utensils"></i> {{ receta.servings }} porciones</span>
+            <span><i class="fas fa-signal"></i> {{ receta.get_difficulty_display }}</span>
+            {% if receta.category %}
+                <span><i class="fas fa-tag"></i> {{ receta.category.name }}</span>
+            {% endif %}
+        </div>
+    </div>
+</div>

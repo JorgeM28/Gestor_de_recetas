@@ -18,7 +18,7 @@
                 </div>
             {% endif %}
             <h2 class="receta-title">
-                <a href="{% url 'detalle_receta' receta.id %}">{{ receta.title }}</a>
+                <a href="{% url 'post:detalle_receta' receta.id %}">{{ receta.title }}</a>
             </h2>
             <div class="receta-meta">
                 <span><i class="fas fa-clock"></i> Preparación: {{ receta.prep_time }} min</span>
@@ -34,7 +34,7 @@
 
 {% if user.is_authenticated %}
 <div class="action-button">
-    <a href="{% url 'nueva_receta' %}" class="btn-add-recipe">
+    <a href="{% url 'post:nueva_receta' %}" class="btn-add-recipe">
         <i class="fas fa-plus"></i> Nueva Receta
     </a>
 </div>

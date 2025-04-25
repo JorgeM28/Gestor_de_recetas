@@ -1,6 +1,6 @@
 /* Variables de color actualizadas */
 :root {
-  --color-primary: #ff6b6b;
+  --color-primary: #6b48ff;
   --color-secondary: #4ecdc4;
   --color-accent: #ffe66d;
   --color-background: #f7f7f7;
@@ -9,6 +9,9 @@
   --color-white: #ffffff;
   --color-gray-light: #f0f0f0;
   --color-shadow: rgba(0, 0, 0, 0.1);
+  --navbar-bg: #2E7D32;           /* Verde bosque para navbar */
+  --notification-bg: #2E7D32;     /* Verde bosque para notificaciones */
+  --notification-text: white;     /* Texto blanco para contraste */
 }
 
 .grid-publicaciones {
